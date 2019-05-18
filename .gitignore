@@ -3,3 +3,6 @@ Hartree_Fock_three_Orbital_SOC.creator
 Hartree_Fock_three_Orbital_SOC.creator.user 
 Hartree_Fock_three_Orbital_SOC.files 
 Hartree_Fock_three_Orbital_SOC.includes
+LOCAL_TEST
+SelfConsistent
+main.o

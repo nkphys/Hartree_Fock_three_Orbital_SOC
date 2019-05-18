@@ -1257,9 +1257,10 @@ void Observables::Calculate_Akw_t2g(){
     //---------Read from input file-----------------------//
     string fileout="Akw_t2g.txt";
     double omega_min, omega_max, d_omega;
-    double eta = 0.08;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ -1]+0.5-Parameters_.mus;d_omega=0.0005;
-    //---------------------------------------------------//
+    double eta = 0.05;
+    //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ -1]+0.5-Parameters_.mus;d_omega=0.0005;
+    omega_min=-6.0;omega_max=6.0;d_omega=0.01;
+	//---------------------------------------------------//
 
 
     int UP_=0;
@@ -1442,8 +1443,9 @@ void Observables::Calculate_Akw_jm(){
     string fileout="Akw_jm.txt";
     double omega_min, omega_max, d_omega;
     double eta = 0.08;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.0005;
-    //---------------------------------------------------//
+    //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.0005;
+    omega_min=-8.0;omega_max=8.0;d_omega=0.02;
+	//---------------------------------------------------//
 
     int UP_=0;
     int DN_=1;
