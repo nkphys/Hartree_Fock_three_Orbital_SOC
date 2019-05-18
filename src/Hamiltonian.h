@@ -221,7 +221,7 @@ double Hamiltonian::GetCLEnergy(){
 
         //Term H2 - Hartree
         for(int alpha=0;alpha<3;alpha++){
-            for(int beta=alpha;beta<3;beta++){
+            for(int beta=alpha+1;beta<3;beta++){
 
                 for(int spin1=0;spin1<2;spin1++){
                     for(int spin2=0;spin2<2;spin2++){
@@ -247,7 +247,7 @@ double Hamiltonian::GetCLEnergy(){
 
         //Term H2 - Fock
         for(int alpha=0;alpha<3;alpha++){
-            for(int beta=alpha;beta<3;beta++){
+            for(int beta=alpha+1;beta<3;beta++){
 
                 for(int spin1=0;spin1<2;spin1++){
                     for(int spin2=0;spin2<2;spin2++){
@@ -273,7 +273,7 @@ double Hamiltonian::GetCLEnergy(){
 
         //Term H3 - Hartree
         for(int alpha=0;alpha<3;alpha++){
-            for(int beta=alpha;beta<3;beta++){
+            for(int beta=alpha+1;beta<3;beta++){
 
                 for(int spin1=0;spin1<2;spin1++){
                     for(int spin2=0;spin2<2;spin2++){
@@ -317,7 +317,7 @@ double Hamiltonian::GetCLEnergy(){
 
         //Term H3 - Fock
         for(int alpha=0;alpha<3;alpha++){
-            for(int beta=alpha;beta<3;beta++){
+            for(int beta=alpha+1;beta<3;beta++){
 
                 for(int spin1=0;spin1<2;spin1++){
                     for(int spin2=0;spin2<2;spin2++){
@@ -361,7 +361,7 @@ double Hamiltonian::GetCLEnergy(){
 
         //Term H4 - "Hartree+Fock"
         for(int alpha=0;alpha<3;alpha++){
-            for(int beta=alpha;beta<3;beta++){
+            for(int beta=alpha+1;beta<3;beta++){
 
                 for(int spin1=0;spin1<2;spin1++){
                     for(int spin2=0;spin2<2;spin2++){
