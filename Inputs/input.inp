@@ -1,14 +1,14 @@
-PBC=true
-Xsite=4
-Ysite=4
+PBC=false
+Xsite=48
+Ysite=1
 TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=32
 TBC_cellsY=32
-Total No. of particles=64
-RandomSeed=14
+Total No. of particles=192
+RandomSeed=3
 
-Pnictides_Hopping=true
+Pnictides_Hopping=false
 Nearest_Neigh_Hopping_t2g_basis_row0=0.5 0.0 0.0
 Nearest_Neigh_Hopping_t2g_basis_row1=0.0 0.5 0.0
 Nearest_Neigh_Hopping_t2g_basis_row2=0.0 0.0 0.5
@@ -21,21 +21,21 @@ Disorder_Strength=0
 Simple_Mixing=0
 Broyden_Mixing=1
 Broyden_Second_Method_Mixing=0
-alpha_OP=0.6
+alpha_OP=0.8
 
 w_minus1=0.1
 wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=0.1
-U_Onsite=2.0
-U_prime_Onsite=1.8
+J_HUND=0.75
+U_Onsite=3.0
+U_prime_Onsite=0.0
 
 Lambda_SOC=0.0
 
 No_of_SelfConsistency_iters=10000
-Convergence_Error=0.001
+Convergence_Error=0.0001
 Read_initial_OPvalues=0
 Read_initial_OPvalues_file=OrderParams_FM_Lx16.txt
 Write_Final_OPvalues_file=OrderParams_OUTPUT.txt

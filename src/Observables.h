@@ -1259,7 +1259,7 @@ void Observables::Calculate_Akw_t2g(){
     double omega_min, omega_max, d_omega;
     double eta = 0.05;
     //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ -1]+0.5-Parameters_.mus;d_omega=0.0005;
-    omega_min=-6.0;omega_max=6.0;d_omega=0.01;
+    omega_min=-8;omega_max=8;d_omega=0.01;
 	//---------------------------------------------------//
 
 
