@@ -1684,8 +1684,12 @@ void Observables::Calculate_Nw_t2g(){
 
     //---------Read from input file-----------------------//
     double omega_min, omega_max, d_omega;
-    double eta = 0.05;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.005;
+    double eta = 0.01;
+    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
+    omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
+    //omega_min=-1.0;
+    //omega_max=1.0;
+    d_omega=0.005;
     //---------------------------------------------------//
 
     int c1;
@@ -1795,8 +1799,12 @@ void Observables::Calculate_Nw_jm(){
     //---------Read from input file-----------------------//
     string fileout="Nw_jm.txt";
     double omega_min, omega_max, d_omega;
-    double eta = 0.05;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.005;
+    double eta = 0.01;
+    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
+    omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
+    //omega_min=-1.0;
+    //omega_max=1.0;
+    d_omega=0.005;
     //---------------------------------------------------//
 
     int c1;

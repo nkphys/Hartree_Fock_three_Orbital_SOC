@@ -1,11 +1,11 @@
-PBC=false
-Xsite=48
+PBC=true
+Xsite=16
 Ysite=1
 TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=32
 TBC_cellsY=32
-Total No. of particles=192
+Total No. of particles=64
 RandomSeed=3
 
 Pnictides_Hopping=false
@@ -28,11 +28,11 @@ wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=0.75
-U_Onsite=3.0
-U_prime_Onsite=0.0
+J_HUND=1.0
+U_Onsite=4.0
+U_prime_Onsite=2.0
 
-Lambda_SOC=0.0
+Lambda_SOC=0.8
 
 No_of_SelfConsistency_iters=10000
 Convergence_Error=0.0001
