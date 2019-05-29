@@ -79,6 +79,10 @@ public:
     void Update_OrderParameters_Second_Broyden(int iter_count);
     void Invert_Beta();
     void Invert_Beta_double();
+    void Calculate_Single_Particle_Density_Matrix();
+    complex<double> Two_particle_Den_Mat(int _alpha, int _beta, int _gamma, int _delta);
+    void Calculate_two_point_correlations();
+
 
     double Omega(int i);
 
@@ -100,6 +104,8 @@ public:
     Mat_3_Complex_doub OParams;
     Mat_1_doub Local_n_orb_resolved;
     Mat_4_Complex_doub F_Exciton;
+
+    Mat_2_Complex_doub SP_Density_Matrix;
 
     // Declare Fields
     Matrix<double> Sz_obs, Sx_obs, Sy_obs;
@@ -141,7 +147,7 @@ public:
 
 
 void Observables::Invert_Beta(){
-/*
+    /*
     int n=_Beta.n_row();
     int lda=_Beta.n_col();
     int info;
@@ -1176,7 +1182,7 @@ void Observables::Calculate_Exciton_Matrix(){
 
     int c1,c2;
     int jm_state1,jm_state2;
-    double Coherence_Length_11;
+    double Coherence_Length_11,Coherence_Length_00;
 
 
     for(int i=0;i<ns_;i++){
@@ -1214,7 +1220,8 @@ void Observables::Calculate_Exciton_Matrix(){
 
                                         for(int n=0;n<Hamiltonian_.eigs_.size();n++){
                                             F_Exciton[i][j][type1][type2] += (
-                                                        (conj(Hamiltonian_.Ham_(c1,n))*Hamiltonian_.Ham_(c2,n))*
+                                                        conj(Transformation(jm_state1,orb1+3*spin1)*(Hamiltonian_.Ham_(c1,n)))*
+                                                        (Hamiltonian_.Ham_(c2,n)*Transformation(jm_state2,orb2+3*spin2))*
                                                         (1.0/( exp((Hamiltonian_.eigs_[n]-Parameters_.mus)*Parameters_.beta ) + 1.0))
                                                         ).real();
                                         }
@@ -1230,6 +1237,7 @@ void Observables::Calculate_Exciton_Matrix(){
 
 
     Coherence_Length_11=0.0;
+    Coherence_Length_00=0.0;
     double num_, den_;
 
     int ix,iy, jx,jy;
@@ -1246,8 +1254,22 @@ void Observables::Calculate_Exciton_Matrix(){
 
     Coherence_Length_11 = sqrt(num_/den_);
 
+    num_=0.0;
+    den_=0.0;
+    for(int i=0;i<ns_;i++){
+        for(int j=0;j<ns_;j++){
+            ix=Coordinates_.indx(i);iy=Coordinates_.indy(i);
+            jx=Coordinates_.indx(j);jy=Coordinates_.indy(j);
+            num_ += ( ((jx-ix)*(jx-ix)) + ((jy-iy)*(jy-iy)) )*abs(F_Exciton[i][j][0][0])*abs(F_Exciton[i][j][0][0]);
+            den_ += abs(F_Exciton[i][j][0][0])*abs(F_Exciton[i][j][0][0]);
+        }
+    }
+
+    Coherence_Length_00 = sqrt(num_/den_);
+
 
     cout<<"Coherence Length for excitons with m=1/2 : "<< Coherence_Length_11<<endl;
+    cout<<"Coherence Length for excitons with m=-1/2 : "<< Coherence_Length_00<<endl;
 
 }
 
@@ -1260,7 +1282,7 @@ void Observables::Calculate_Akw_t2g(){
     double eta = 0.05;
     //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ -1]+0.5-Parameters_.mus;d_omega=0.0005;
     omega_min=-8;omega_max=8;d_omega=0.01;
-	//---------------------------------------------------//
+    //---------------------------------------------------//
 
 
     int UP_=0;
@@ -1296,8 +1318,8 @@ void Observables::Calculate_Akw_t2g(){
     complex<double> Ndn_check(0,0);
 
     for (int j=0;j<Parameters_.ns;j++){
+        cout<<"Akw for "<<j<<" done"<<endl;
         for (int l=0;l<Parameters_.ns;l++){
-            cout<<"Akw for "<<l<<"  "<<j<<" done"<<endl;
             for(int omega_ind=0;omega_ind<omega_index_max;omega_ind++){
                 A_YZ[j][l][omega_ind]=zero_complex;
                 A_XZ[j][l][omega_ind]=zero_complex;
@@ -1445,7 +1467,7 @@ void Observables::Calculate_Akw_jm(){
     double eta = 0.08;
     //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.0005;
     omega_min=-8.0;omega_max=8.0;d_omega=0.02;
-	//---------------------------------------------------//
+    //---------------------------------------------------//
 
     int UP_=0;
     int DN_=1;
@@ -1480,8 +1502,9 @@ void Observables::Calculate_Akw_jm(){
     complex<double> Ndn_check(0,0);
 
     for (int j=0;j<Parameters_.ns;j++){
+        cout<<"Akw for "<<j<<" done"<<endl;
         for (int l=0;l<Parameters_.ns;l++){
-            cout<<"Akw for "<<l<<"  "<<j<<" done"<<endl;
+
             for(int omega_ind=0;omega_ind<omega_index_max;omega_ind++){
                 A_j3by2_pm3by2[j][l][omega_ind]=zero_complex;
                 A_j3by2_pm1by2[j][l][omega_ind]=zero_complex;
@@ -2874,7 +2897,262 @@ void Observables::Calculate_Orbitalcorrelations_Smartly(){
 }
 
 
+void Observables::Calculate_Single_Particle_Density_Matrix(){
 
+    /*
+      NOTE:
+      SP_Density_Matrix[alpha][beta] = <c_{alpha^{daggger}} c_{beta}>
+     */
+    SP_Density_Matrix.resize(ns_*6);
+    for(int i=0;i<ns_*6;i++){
+        SP_Density_Matrix[i].resize(ns_*6);
+    }
+
+    for(int alpha_=0;alpha_<ns_*6;alpha_++){
+        for(int beta_=0;beta_<ns_*6;beta_++){
+            SP_Density_Matrix[alpha_][beta_] = zero_complex;
+            for(int n=0;n<ns_*6;n++){
+                SP_Density_Matrix[alpha_][beta_] += conj(Hamiltonian_.Ham_(alpha_,n))*Hamiltonian_.Ham_(beta_,n)*
+                        (1.0/( exp((Hamiltonian_.eigs_[n]-Parameters_.mus)*Parameters_.beta ) + 1.0));
+            }
+        }
+    }
+
+}
+
+void Observables::Calculate_two_point_correlations(){
+
+    int YZ_,XZ_,XY_;
+    YZ_=0; XZ_=1; XY_=2;
+
+    int UP_, DOWN_;
+    UP_=0;DOWN_=1;
+
+    int _Sz, _Sx,_Sy, _Lz, _Lx,_Ly;
+    int _Jz_eff, _Jx_eff,_Jy_eff;
+    int _Mz, _Mx,_My;
+
+    Mat_1_string opr_type;
+    opr_type.clear();
+    opr_type.push_back("Sz");_Sz=0;
+    opr_type.push_back("Sx");_Sx=1;
+    opr_type.push_back("Sy");_Sy=2;
+    opr_type.push_back("Lz");_Lz=3;
+    opr_type.push_back("Lx");_Lx=4;
+    opr_type.push_back("Ly");_Ly=5;
+    opr_type.push_back("Jz_eff");_Jz_eff=6;
+    opr_type.push_back("Jx_eff");_Jx_eff=7;
+    opr_type.push_back("Jy_eff");_Jy_eff=8;
+    opr_type.push_back("Mz");_Mz=9;
+    opr_type.push_back("Mx");_Mx=10;
+    opr_type.push_back("My");_My=11;
+
+
+    Mat_3_Complex_doub Oprs_;
+    Oprs_.resize(opr_type.size());
+    for(int opr_no_=0;opr_no_<opr_type.size();opr_no_++){
+        Oprs_[opr_no_].clear();
+        Oprs_[opr_no_].resize(6);
+        for(int i=0;i<6;i++){
+            Oprs_[opr_no_][i].resize(6);
+        }
+    }
+
+
+
+
+    //Opr. =\sum_{orb1,orb2,spin1,spin2}Temp_Mat{orb1,spin1;orb2,spin2}c*_{orb1,spin1}c_{orb2,spin2}
+    //    for(int orb1=0;orb1<3;orb1++){
+    //        for(int spin1=0;spin1<2;spin1++){
+    //            //orb1 + 3*spin1
+    //            for(int orb2=0;orb2<3;orb2++){
+    //                for(int spin2=0;spin2<2;spin2++){
+    //                }
+    //            }
+    //        }
+    //    }
+
+    int opr_no;
+
+    //Sz---
+    assert(opr_type[_Sz]=="Sz");
+    for(int orb1=0;orb1<3;orb1++){
+        for(int spin1=0;spin1<2;spin1++){
+            Oprs_[_Sz][orb1 + 3*spin1][orb1 + 3*spin1]=one_complex*(0.5*(1.0-(2.0*spin1)));
+        }}
+
+
+    //Sx---
+    assert(opr_type[_Sx]=="Sx");
+    for(int orb1=0;orb1<3;orb1++){
+        Oprs_[_Sx][orb1 + 3*0][orb1 + 3*1]=one_complex*(0.5);
+        Oprs_[_Sx][orb1 + 3*1][orb1 + 3*0]=one_complex*(0.5);
+    }
+
+    //Sy---
+    assert(opr_type[_Sy]=="Sy");
+    for(int orb1=0;orb1<3;orb1++){
+        Oprs_[_Sy][orb1 + 3*0][orb1 + 3*1]=(-1.0*iota_complex)*(0.5);
+        Oprs_[_Sy][orb1 + 3*1][orb1 + 3*0]=(-1.0*iota_complex)*(-0.5);
+    }
+
+    //Lz---
+    assert(opr_type[_Lz]=="Lz");
+    for(int spin1=0;spin1<2;spin1++){
+        Oprs_[_Lz][YZ_ + 3*spin1][XZ_ + 3*spin1]=iota_complex;
+        Oprs_[_Lz][XZ_ + 3*spin1][YZ_ + 3*spin1]=iota_complex*(-1.0);
+    }
+
+    //Lx---
+    opr_no=_Lx;
+    assert(opr_type[opr_no]=="Lx");
+    for(int spin1=0;spin1<2;spin1++){
+        Oprs_[opr_no][XZ_ + 3*spin1][XY_ + 3*spin1]=iota_complex;
+        Oprs_[opr_no][XY_ + 3*spin1][XZ_ + 3*spin1]=iota_complex*(-1.0);
+    }
+
+    //Ly---
+    opr_no=_Ly;
+    assert(opr_type[opr_no]=="Ly");
+    for(int spin1=0;spin1<2;spin1++){
+        Oprs_[opr_no][XY_ + 3*spin1][YZ_ + 3*spin1]=iota_complex;
+        Oprs_[opr_no][YZ_ + 3*spin1][XY_ + 3*spin1]=iota_complex*(-1.0);
+    }
+
+    //J_eff = S-L----------
+    assert(opr_type[_Jz_eff]=="Jz_eff");
+    assert(opr_type[_Jx_eff]=="Jx_eff");
+    assert(opr_type[_Jy_eff]=="Jy_eff");
+    assert(opr_type[_Mz]=="Mz");
+    assert(opr_type[_Mx]=="Mx");
+    assert(opr_type[_My]=="My");
+    for(int ir=0;ir<6;ir++){
+        for(int ic=0;ic<6;ic++){
+           Oprs_[_Jz_eff][ir][ic]=Oprs_[_Sz][ir][ic] - Oprs_[_Lz][ir][ic];
+           Oprs_[_Jx_eff][ir][ic]=Oprs_[_Sx][ir][ic] - Oprs_[_Lx][ir][ic];
+           Oprs_[_Jy_eff][ir][ic]=Oprs_[_Sy][ir][ic] - Oprs_[_Ly][ir][ic];
+           Oprs_[_Mz][ir][ic]=2.0*Oprs_[_Sz][ir][ic] + Oprs_[_Lz][ir][ic];
+           Oprs_[_Mx][ir][ic]=2.0*Oprs_[_Sx][ir][ic] + Oprs_[_Lx][ir][ic];
+           Oprs_[_My][ir][ic]=2.0*Oprs_[_Sy][ir][ic] + Oprs_[_Ly][ir][ic];
+        }
+    }
+
+
+
+
+    string corrs_out = "corrs.txt";
+    ofstream file_corrs_out(corrs_out.c_str());
+    file_corrs_out<<"#site_i   site_i(x)    site_i(y)    site_j   site_j(x)    site_j(y)     SS[site_i][site_j]     LL[site_i][site_j]     JeffJeff[site_i][site_j]     MM[site_i][site_j]"<<endl;
+
+    int i1,i2,j1,j2;
+
+    complex<double> temp_val_SS, temp_val_LL, temp_val_JeffJeff, temp_val_MM;
+    for(int i=0;i<ns_;i++){
+        for(int j=0;j<ns_;j++){
+            temp_val_SS = zero_complex;
+            temp_val_LL = zero_complex;
+            temp_val_JeffJeff = zero_complex;
+            temp_val_MM = zero_complex;
+
+            for(int i_row=0;i_row<6;i_row++){
+                for(int i_col=0;i_col<6;i_col++){
+
+                    for(int j_row=0;j_row<6;j_row++){
+                        for(int j_col=0;j_col<6;j_col++){
+
+                            //S.S
+                            for(int comp=_Sz;comp<_Sy+1;comp++){
+                                if( (Oprs_[comp][i_row][i_col] !=zero_complex)
+                                        &&
+                                        (Oprs_[comp][j_row][j_col] !=zero_complex)   ){
+                                    i1=Coordinates_.Nc_dof(i,i_row);
+                                    i2=Coordinates_.Nc_dof(i,i_col);
+                                    j1=Coordinates_.Nc_dof(j,j_row);
+                                    j2=Coordinates_.Nc_dof(j,j_col);
+                                    temp_val_SS += Oprs_[comp][i_row][i_col]*Oprs_[comp][j_row][j_col]*
+                                            Two_particle_Den_Mat(i1,i2,j1,j2);
+                                }
+                            }
+
+                            //L.L
+                            for(int comp=_Lz;comp<_Ly+1;comp++){
+                                if( (Oprs_[comp][i_row][i_col] !=zero_complex)
+                                        &&
+                                        (Oprs_[comp][j_row][j_col] !=zero_complex)   ){
+                                    i1=Coordinates_.Nc_dof(i,i_row);
+                                    i2=Coordinates_.Nc_dof(i,i_col);
+                                    j1=Coordinates_.Nc_dof(j,j_row);
+                                    j2=Coordinates_.Nc_dof(j,j_col);
+                                    temp_val_LL += Oprs_[comp][i_row][i_col]*Oprs_[comp][j_row][j_col]*
+                                            Two_particle_Den_Mat(i1,i2,j1,j2);
+                                }
+                            }
+
+                            //J_eff.J_eff
+                            for(int comp=_Jz_eff;comp<_Jy_eff+1;comp++){
+                                if( (Oprs_[comp][i_row][i_col] !=zero_complex)
+                                        &&
+                                        (Oprs_[comp][j_row][j_col] !=zero_complex)   ){
+                                    i1=Coordinates_.Nc_dof(i,i_row);
+                                    i2=Coordinates_.Nc_dof(i,i_col);
+                                    j1=Coordinates_.Nc_dof(j,j_row);
+                                    j2=Coordinates_.Nc_dof(j,j_col);
+                                    temp_val_JeffJeff += Oprs_[comp][i_row][i_col]*Oprs_[comp][j_row][j_col]*
+                                            Two_particle_Den_Mat(i1,i2,j1,j2);
+                                }
+                            }
+
+                            //M.M
+                            for(int comp=_Mz;comp<_My+1;comp++){
+                                if( (Oprs_[comp][i_row][i_col] !=zero_complex)
+                                        &&
+                                        (Oprs_[comp][j_row][j_col] !=zero_complex)   ){
+                                    i1=Coordinates_.Nc_dof(i,i_row);
+                                    i2=Coordinates_.Nc_dof(i,i_col);
+                                    j1=Coordinates_.Nc_dof(j,j_row);
+                                    j2=Coordinates_.Nc_dof(j,j_col);
+                                    temp_val_MM += Oprs_[comp][i_row][i_col]*Oprs_[comp][j_row][j_col]*
+                                            Two_particle_Den_Mat(i1,i2,j1,j2);
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            file_corrs_out<<i<<setw(15)<<Coordinates_.indx(i)<<setw(15)<<Coordinates_.indy(i)<<setw(15)<<j<<setw(15)<<Coordinates_.indx(j)<<setw(15)<<Coordinates_.indy(j)<<
+                            setw(15)<<temp_val_SS.real()<<//"\t"<<temp_val_SS.imag()<<
+                            setw(15)<<temp_val_LL.real()<<//"\t"<<temp_val_LL.imag()<<
+                            setw(15)<<temp_val_JeffJeff.real()<<//"\t"<<temp_val_JeffJeff.imag()<<
+                            setw(15)<<temp_val_MM.real()<<endl;//"\t"<<temp_val_MM.imag()<<endl;
+
+        }
+    }
+
+
+
+    //------------------------------//
+}
+
+complex<double> Observables::Two_particle_Den_Mat(int _alpha, int _beta, int _gamma, int _delta){
+
+    complex<double> temp;
+    complex<double> delta_gamma_beta;
+
+    if(_gamma == _beta){
+        delta_gamma_beta=one_complex;
+    }
+    else{
+        assert(_gamma != _beta);
+        delta_gamma_beta=zero_complex;
+    }
+
+    temp = (SP_Density_Matrix[_alpha][_beta]*SP_Density_Matrix[_gamma][_delta])
+            +
+            (SP_Density_Matrix[_alpha][_delta]*(delta_gamma_beta - SP_Density_Matrix[_gamma][_beta]));
+
+    return temp;
+}
 
 void Observables::Calculate_Excitoncorrelations_Smartly(){
 
