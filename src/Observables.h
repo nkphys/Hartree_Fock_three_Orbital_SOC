@@ -1279,9 +1279,10 @@ void Observables::Calculate_Akw_t2g(){
     //---------Read from input file-----------------------//
     string fileout="Akw_t2g.txt";
     double omega_min, omega_max, d_omega;
-    double eta = 0.05;
+    double eta = Parameters_.eta_dos;
+    d_omega=Parameters_.dw_dos;
     //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ -1]+0.5-Parameters_.mus;d_omega=0.0005;
-    omega_min=-8;omega_max=8;d_omega=0.01;
+    omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
     //---------------------------------------------------//
 
 
@@ -1333,17 +1334,17 @@ void Observables::Calculate_Akw_t2g(){
                         c1 = Coordinates_.Nc_dof(l,YZ_ + 3*spin);
                         c2 = Coordinates_.Nc_dof(j,YZ_ + 3*spin);
                         A_YZ[j][l][omega_ind] +=  conj(Hamiltonian_.Ham_(c1,n))*Hamiltonian_.Ham_(c2,n)*
-                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                         c1 = Coordinates_.Nc_dof(l,XZ_ + 3*spin);
                         c2 = Coordinates_.Nc_dof(j,XZ_ + 3*spin);
                         A_XZ[j][l][omega_ind] +=  conj(Hamiltonian_.Ham_(c1,n))*Hamiltonian_.Ham_(c2,n)*
-                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                         c1 = Coordinates_.Nc_dof(l,XY_ + 3*spin);
                         c2 = Coordinates_.Nc_dof(j,XY_ + 3*spin);
                         A_XY[j][l][omega_ind] +=  conj(Hamiltonian_.Ham_(c1,n))*Hamiltonian_.Ham_(c2,n)*
-                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
                     }
                 }
             }
@@ -1464,9 +1465,10 @@ void Observables::Calculate_Akw_jm(){
     //---------Read from input file-----------------------//
     string fileout="Akw_jm.txt";
     double omega_min, omega_max, d_omega;
-    double eta = 0.08;
+    double eta = Parameters_.eta_dos;
+    d_omega=Parameters_.dw_dos;
     //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;d_omega=0.0005;
-    omega_min=-8.0;omega_max=8.0;d_omega=0.02;
+    omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
     //---------------------------------------------------//
 
     int UP_=0;
@@ -1531,7 +1533,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(1,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
                                     if(Transformation(0,orb1+3*spin1) !=zero_complex
@@ -1542,7 +1544,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(0,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
 
@@ -1554,7 +1556,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(3,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
                                     if(Transformation(2,orb1+3*spin1) !=zero_complex
@@ -1565,7 +1567,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(2,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
 
@@ -1577,7 +1579,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(5,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
                                     if(Transformation(4,orb1+3*spin1) !=zero_complex
@@ -1588,7 +1590,7 @@ void Observables::Calculate_Akw_jm(){
                                                 conj(_HAM(c1,n))*
                                                 Transformation(4,orb2+3*spin2)*
                                                 _HAM(c2,n)*
-                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta);
+                                                Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta);
 
                                     }
                                 }
@@ -1707,12 +1709,11 @@ void Observables::Calculate_Nw_t2g(){
 
     //---------Read from input file-----------------------//
     double omega_min, omega_max, d_omega;
-    double eta = 0.01;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
-    omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
-    //omega_min=-1.0;
-    //omega_max=1.0;
-    d_omega=0.005;
+    //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
+    //omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
+    omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
+    double eta = Parameters_.eta_dos;
+    d_omega=Parameters_.dw_dos;
     //---------------------------------------------------//
 
     int c1;
@@ -1783,7 +1784,7 @@ void Observables::Calculate_Nw_t2g(){
 
                 for(int n=0;n<Hamiltonian_.Ham_.n_row();n++){
                     temp_val += ( conj(Hamiltonian_.Ham_(c1,n))*Hamiltonian_.Ham_(c1,n)*
-                                  Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta)).real();
+                                  Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta)).real();
 
                 }
 
@@ -1793,7 +1794,7 @@ void Observables::Calculate_Nw_t2g(){
         file_Nw_out_t2g<<endl;
     }
 
-    file_Nw_out_t2g<<"#actual mu = "<< Parameters_.mus<<", but shifted to 0"<<endl;
+    file_Nw_out_t2g<<"#actual mu = "<< Parameters_.mus<<" mu NOT shifted to 0"<<endl;
 
     //---------------------------------------------------------------------------------//
     //*********************************************************************************//
@@ -1822,12 +1823,11 @@ void Observables::Calculate_Nw_jm(){
     //---------Read from input file-----------------------//
     string fileout="Nw_jm.txt";
     double omega_min, omega_max, d_omega;
-    double eta = 0.01;
-    omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
-    omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
-    //omega_min=-1.0;
-    //omega_max=1.0;
-    d_omega=0.005;
+    //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
+    //omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
+    omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
+    double eta = Parameters_.eta_dos;
+    d_omega=Parameters_.dw_dos;
     //---------------------------------------------------//
 
     int c1;
@@ -1869,7 +1869,7 @@ void Observables::Calculate_Nw_jm(){
 
                                     for(int n=0;n<Hamiltonian_.Ham_.n_row();n++){
                                         temp_val += ( conj(Transformation(state_type,orb1 + 3*spin1)*Hamiltonian_.Ham_(c1,n))*Transformation(state_type,orb2 + 3*spin2)*Hamiltonian_.Ham_(c2,n)*
-                                                      Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] -Parameters_.mus), eta)).real();
+                                                      Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta)).real();
 
                                     }
 
@@ -1886,7 +1886,7 @@ void Observables::Calculate_Nw_jm(){
         file_Nw_out<<endl;
     }
 
-    file_Nw_out<<"#actual mu = "<< Parameters_.mus<<", but shifted to 0"<<endl;
+    file_Nw_out<<"#actual mu = "<< Parameters_.mus<<", mu NOT shifted to 0"<<endl;
 
 }
 
@@ -3150,7 +3150,6 @@ complex<double> Observables::Two_particle_Den_Mat(int _alpha, int _beta, int _ga
     temp = (SP_Density_Matrix[_alpha][_beta]*SP_Density_Matrix[_gamma][_delta])
             +
             (SP_Density_Matrix[_alpha][_delta]*(delta_gamma_beta - SP_Density_Matrix[_gamma][_beta]));
-
     return temp;
 }
 

@@ -19,6 +19,9 @@ public:
     bool PBC;
     bool PNICTIDES_HOPPING;
 
+    double dw_dos, eta_dos;
+    double w_min, w_max;
+
     bool Read_OPs;
     string File_OPs_in, File_OPs_out;
 
@@ -80,6 +83,12 @@ void Parameters::Initialize(string inputfile_){
     U_onsite = matchstring(inputfile_,"U_Onsite");
     U_prime_onsite = matchstring(inputfile_,"U_prime_Onsite");
     Lambda_SOC = matchstring(inputfile_, "Lambda_SOC");
+
+    //dw_dos, eta_dos
+    dw_dos = matchstring(inputfile_, "dw_dos");
+    eta_dos = matchstring(inputfile_, "eta_dos");
+    w_min = matchstring(inputfile_, "w_min");
+    w_max = matchstring(inputfile_, "w_max");
 
     alpha_OP = matchstring(inputfile_,"alpha_OP");
     w_minus1 = matchstring(inputfile_,"w_minus1");

@@ -1,10 +1,10 @@
 PBC=false
-Xsite=16
-Ysite=1
-TwistedBoundaryCond_mx=0
+Xsite=8
+Ysite=8
+TwistedBoundaryCond_mx=1
 TwistedBoundaryCond_my=0
-TBC_cellsX=32
-TBC_cellsY=32
+TBC_cellsX=4
+TBC_cellsY=4
 Total No. of particles=64
 RandomSeed=1
 
@@ -18,8 +18,8 @@ Crystal_Field_t2g=0.0 0.0 0.0
 RandomDisorderSeed=40
 Disorder_Strength=0
 
-Simple_Mixing=0
-Broyden_Mixing=1
+Simple_Mixing=1
+Broyden_Mixing=0
 Broyden_Second_Method_Mixing=0
 alpha_OP=0.6
 
@@ -28,14 +28,19 @@ wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=5.0
-U_Onsite=20.0
-U_prime_Onsite=10.0
+J_HUND=0.0
+U_Onsite=0.0
+U_prime_Onsite=0.0
+Lambda_SOC=0.0
 
-Lambda_SOC=0.2
+
+dw_dos=0.005
+eta_dos=0.05
+w_min=-1.8
+w_max=5.0
 
 No_of_SelfConsistency_iters=10000
 Convergence_Error=0.00001
-Read_initial_OPvalues=1
+Read_initial_OPvalues=0
 Read_initial_OPvalues_file=OrderParams_Exc.txt
 Write_Final_OPvalues_file=OrderParams_OUTPUT.txt
