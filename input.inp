@@ -1,7 +1,7 @@
 PBC=false
-Xsite=8
-Ysite=8
-TwistedBoundaryCond_mx=1
+Xsite=16
+Ysite=16
+TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=4
 TBC_cellsY=4
@@ -21,7 +21,7 @@ Disorder_Strength=0
 Simple_Mixing=1
 Broyden_Mixing=0
 Broyden_Second_Method_Mixing=0
-alpha_OP=0.6
+alpha_OP=1.0
 
 w_minus1=0.1
 wn=0.6
@@ -39,7 +39,7 @@ eta_dos=0.05
 w_min=-1.8
 w_max=5.0
 
-No_of_SelfConsistency_iters=10000
+No_of_SelfConsistency_iters=1
 Convergence_Error=0.00001
 Read_initial_OPvalues=0
 Read_initial_OPvalues_file=OrderParams_Exc.txt
