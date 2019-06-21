@@ -1830,29 +1830,23 @@ void Observables::Calculate_Nw_jm(){
     d_omega=Parameters_.dw_dos;
     //---------------------------------------------------//
 
-    int c1;
+    int c1,c2;
     int omega_index_max = int( (omega_max - omega_min)/(d_omega) );
     double temp_val ;
 
+    Mat_2_Complex_doub M_coeff;
+    M_coeff.resize(Hamiltonian_.Ham_.n_row());
+    for(int n=0;n<M_coeff.size();n++){
+        M_coeff[n].resize(6);
+    }
 
-    int c2;
+    //----------------------------------------------
 
-
-    ofstream file_Nw_out(fileout.c_str());
-
-    file_Nw_out<<"#(w-mu)    jm_3by2_m3by2     jm_3by2_3by2     ";
-    file_Nw_out<<"jm_3by2_m1by2       jm_3by2_1by2     jm_1by2_m1by2   jm_1by2_1by2"<<endl;
-
-    for(int omega_ind=0;omega_ind<omega_index_max;omega_ind++){
-        file_Nw_out<<omega_min + (omega_ind*d_omega)<<"       ";
-
-
+    for(int n=0;n<Hamiltonian_.Ham_.n_row();n++){
         for(int state_type=0;state_type<6;state_type++){
-            temp_val=0.0;
-
+            M_coeff[n][state_type]=zero_complex;
 
             for(int site=0;site<Coordinates_.ns_;site++){
-
                 for(int orb1=0;orb1<3;orb1++){
                     for(int spin1=0;spin1<2;spin1++){
                         for(int orb2=0;orb2<3;orb2++){
@@ -1867,25 +1861,42 @@ void Observables::Calculate_Nw_jm(){
                                     c1=Coordinates_.Nc_dof_(site,orb1 + 3*spin1);
                                     c2=Coordinates_.Nc_dof_(site,orb2 + 3*spin2);
 
-                                    for(int n=0;n<Hamiltonian_.Ham_.n_row();n++){
-                                        temp_val += ( conj(Transformation(state_type,orb1 + 3*spin1)*Hamiltonian_.Ham_(c1,n))*Transformation(state_type,orb2 + 3*spin2)*Hamiltonian_.Ham_(c2,n)*
-                                                      Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta)).real();
 
-                                    }
+                                    M_coeff[n][state_type] += conj(Transformation(state_type,orb1 + 3*spin1)*Hamiltonian_.Ham_(c1,n))*
+                                            Transformation(state_type,orb2 + 3*spin2)*Hamiltonian_.Ham_(c2,n);
 
                                 }
-
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    //------------------------------------------------
+
+
+    ofstream file_Nw_out(fileout.c_str());
+
+    file_Nw_out<<"#(w-mu)    jm_3by2_m3by2     jm_3by2_3by2     ";
+    file_Nw_out<<"jm_3by2_m1by2       jm_3by2_1by2     jm_1by2_m1by2   jm_1by2_1by2"<<endl;
+
+    for(int omega_ind=0;omega_ind<omega_index_max;omega_ind++){
+        file_Nw_out<<omega_min + (omega_ind*d_omega)<<"       ";
+
+        for(int state_type=0;state_type<6;state_type++){
+            temp_val=0.0;
+            for(int n=0;n<Hamiltonian_.Ham_.n_row();n++){
+                temp_val += ( M_coeff[n][state_type]*
+                              Lorentzian( omega_min + (omega_ind*d_omega) - (Hamiltonian_.eigs_[n] - 0.0*Parameters_.mus), eta)
+                              ).real();
 
             }
             file_Nw_out<<temp_val<<"      ";
         }
         file_Nw_out<<endl;
     }
-
     file_Nw_out<<"#actual mu = "<< Parameters_.mus<<", mu NOT shifted to 0"<<endl;
 
 }
@@ -3028,12 +3039,12 @@ void Observables::Calculate_two_point_correlations(){
     assert(opr_type[_My]=="My");
     for(int ir=0;ir<6;ir++){
         for(int ic=0;ic<6;ic++){
-           Oprs_[_Jz_eff][ir][ic]=Oprs_[_Sz][ir][ic] - Oprs_[_Lz][ir][ic];
-           Oprs_[_Jx_eff][ir][ic]=Oprs_[_Sx][ir][ic] - Oprs_[_Lx][ir][ic];
-           Oprs_[_Jy_eff][ir][ic]=Oprs_[_Sy][ir][ic] - Oprs_[_Ly][ir][ic];
-           Oprs_[_Mz][ir][ic]=2.0*Oprs_[_Sz][ir][ic] + Oprs_[_Lz][ir][ic];
-           Oprs_[_Mx][ir][ic]=2.0*Oprs_[_Sx][ir][ic] + Oprs_[_Lx][ir][ic];
-           Oprs_[_My][ir][ic]=2.0*Oprs_[_Sy][ir][ic] + Oprs_[_Ly][ir][ic];
+            Oprs_[_Jz_eff][ir][ic]=Oprs_[_Sz][ir][ic] - Oprs_[_Lz][ir][ic];
+            Oprs_[_Jx_eff][ir][ic]=Oprs_[_Sx][ir][ic] - Oprs_[_Lx][ir][ic];
+            Oprs_[_Jy_eff][ir][ic]=Oprs_[_Sy][ir][ic] - Oprs_[_Ly][ir][ic];
+            Oprs_[_Mz][ir][ic]=2.0*Oprs_[_Sz][ir][ic] + Oprs_[_Lz][ir][ic];
+            Oprs_[_Mx][ir][ic]=2.0*Oprs_[_Sx][ir][ic] + Oprs_[_Lx][ir][ic];
+            Oprs_[_My][ir][ic]=2.0*Oprs_[_Sy][ir][ic] + Oprs_[_Ly][ir][ic];
         }
     }
 

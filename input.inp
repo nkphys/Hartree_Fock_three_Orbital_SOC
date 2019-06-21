@@ -1,11 +1,11 @@
-PBC=false
-Xsite=16
-Ysite=16
+PBC=true
+Xsite=8
+Ysite=8
 TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=4
 TBC_cellsY=4
-Total No. of particles=64
+Total No. of particles=256
 RandomSeed=1
 
 Pnictides_Hopping=false
@@ -21,7 +21,7 @@ Disorder_Strength=0
 Simple_Mixing=1
 Broyden_Mixing=0
 Broyden_Second_Method_Mixing=0
-alpha_OP=1.0
+alpha_OP=0
 
 w_minus1=0.1
 wn=0.6
@@ -31,12 +31,12 @@ BroydenSecondMethodCounter=10
 J_HUND=0.0
 U_Onsite=0.0
 U_prime_Onsite=0.0
-Lambda_SOC=0.0
+Lambda_SOC=1.2
 
 
 dw_dos=0.005
 eta_dos=0.05
-w_min=-1.8
+w_min=-5.0
 w_max=5.0
 
 No_of_SelfConsistency_iters=1
