@@ -84,20 +84,20 @@ int main(int argc, char *argv[]) {
         SelfConsistencyEngine SelfConsistencyEngine_(Parameters_,Coordinates_,MFParams_,Hamiltonian_,Observables_);
         SelfConsistencyEngine_.RUN_SelfConsistencyEngine();
         //Observables_.Calculate_Local_Density();
-        Observables_.Calculate_Nw_t2g();
+        //Observables_.Calculate_Nw_t2g();
         Observables_.Calculate_Nw_jm();
 
         //Observables_.Calculate_IPR();
         //Observables_.Calculate_SpinSpincorrelations();
 
-        // Observables_.Calculate_Single_Particle_Density_Matrix();
-        // Observables_.Calculate_two_point_correlations();
+         Observables_.Calculate_Single_Particle_Density_Matrix();
+         Observables_.Calculate_two_point_correlations();
 
 
-      // Observables_.Calculate_SpinSpincorrelations_Smartly();
-      // Observables_.Calculate_Orbitalcorrelations_Smartly();
-        // Observables_.Calculate_Excitoncorrelations_Smartly();
-        //  Observables_.Calculate_Exciton_Matrix();
+       Observables_.Calculate_SpinSpincorrelations_Smartly();
+       Observables_.Calculate_Orbitalcorrelations_Smartly();
+         Observables_.Calculate_Excitoncorrelations_Smartly();
+          Observables_.Calculate_Exciton_Matrix_and_Momentum_Distribution();
        //   Observables_.Calculate_Akw_t2g();
       //  Observables_.Calculate_Akw_jm();
         //Observables_.Calculate_Optical_Conductivity();

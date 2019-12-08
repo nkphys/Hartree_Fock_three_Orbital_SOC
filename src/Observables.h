@@ -72,7 +72,7 @@ public:
     void OccDensity(int tlabel);
     void Calculate_Local_Density();
     void Calculate_Order_Params();
-    void Calculate_Exciton_Matrix();
+    void Calculate_Exciton_Matrix_and_Momentum_Distribution();
     void Calculate_Local_n_orb_resolved();
     void Get_OrderParameters_diffs();
     void Update_OrderParameters(int iter);
@@ -1178,13 +1178,119 @@ void Observables::Calculate_Order_Params(){
 
 }
 
-void Observables::Calculate_Exciton_Matrix(){
+void Observables::Calculate_Exciton_Matrix_and_Momentum_Distribution(){
 
     int c1,c2;
-    int jm_state1,jm_state2;
+    int jm_state1,jm_state2, jm_state;
     double Coherence_Length_11,Coherence_Length_00;
+    Mat_3_Complex_doub OccN;
+    OccN.resize(ns_);
+    for(int i=0;i<ns_;i++){
+        OccN[i].resize(ns_);
+        for(int j=0;j<ns_;j++){
+            OccN[i][j].resize(4);
+        }
+    }
+
+    //Calculating n[i,j]-------------------------------------
+    for(int i=0;i<ns_;i++){
+        for(int j=0;j<ns_;j++){
+            for(int type=0;type<4;type++){
+                if(type==0)
+                {jm_state=3;  //i.e. 3by2_1by2
+                }
+                if(type==1)
+                {jm_state=2;  //i.e. 3by2_m1by2
+                }
+                if(type==2)
+                {jm_state=5;  //i.e. 1by2_1by2
+                }
+                if(type==3)
+                {jm_state=4;  //i.e. 1by2_m1by2
+                }
+
+                OccN[i][j][type]=zero_complex;
 
 
+                for(int orb1=0;orb1<3;orb1++){
+                    for(int orb2=0;orb2<3;orb2++){
+                        for(int spin1=0;spin1<2;spin1++){
+                            for(int spin2=0;spin2<2;spin2++){
+
+                                if(Transformation(jm_state,orb1+3*spin1) !=zero_complex
+                                        &&
+                                        Transformation(jm_state,orb2+3*spin2) !=zero_complex
+                                        ){
+                                    c1=Coordinates_.Nc_dof(i,orb1+3*spin1); //up
+                                    c2=Coordinates_.Nc_dof(j,orb2+3*spin2); //down
+
+                                    for(int n=0;n<Hamiltonian_.eigs_.size();n++){
+                                        OccN[i][j][type] += (
+                                                    conj(Transformation(jm_state,orb1+3*spin1)*(Hamiltonian_.Ham_(c1,n)))*
+                                                    (Hamiltonian_.Ham_(c2,n)*Transformation(jm_state,orb2+3*spin2))*
+                                                    (1.0/( exp((Hamiltonian_.eigs_[n]-Parameters_.mus)*Parameters_.beta ) + 1.0))
+                                                    );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //-----------------------------------------------------
+
+
+    //Calculating n(k)--------------------------------------
+    string Nq_out = "Nq.txt";
+    ofstream file_Nq_out(Nq_out.c_str());
+    file_Nq_out<<"#qx  qy   qx_index    qy_index   N(j=3by2_1by2)(qx,qy)  N(j=3by2_m1by2)(qx,qy) N(j=1by2_1by2)(qx,qy) N(j=1by2_m1by2)(qx,qy)"<<endl;
+
+    double qx_, qy_;
+    Mat_1_Complex_doub N_value;
+    int site_i, site_j;
+    N_value.resize(4);
+
+    for(int qy=0;qy<ly_;qy++){
+        for(int qx=0;qx<lx_;qx++){
+            N_value[0] = zero_complex;N_value[1] = zero_complex;
+            N_value[2] = zero_complex;N_value[3] = zero_complex;
+
+            qx_ = (2.0*qx*PI)*(1.0/(1.0*lx_));
+            qy_ = (2.0*qy*PI)*(1.0/(1.0*ly_));
+
+            for(int type=0;type<4;type++){
+
+            for(int ix=0;ix<lx_;ix++){
+                for(int iy=0;iy<ly_;iy++){
+                    site_i=Coordinates_.Nc(ix,iy);
+
+                    for(int jx=0;jx<lx_;jx++){
+                        for(int jy=0;jy<ly_;jy++){
+                            site_j=Coordinates_.Nc(jx,jy);
+
+                            N_value[type] += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                    OccN[site_i][site_j][type]*(1.0/(1.0*ns_));
+
+                        }}
+                }}
+            }
+
+
+
+            file_Nq_out<<qx_<<"\t"<<qy_<<"\t"<<qx<<"\t"<<qy<<"\t"<<real(N_value[0])<<"\t"<<imag(N_value[0])<<"\t"<<real(N_value[1])<<"\t"<<imag(N_value[1])
+                    <<"\t"<<real(N_value[2])<<"\t"<<imag(N_value[2])<<"\t"<<real(N_value[3])<<"\t"<<imag(N_value[3])<<endl;
+
+        }
+        file_Nq_out<<endl;
+    }
+    //------------------------------------------------------
+
+
+
+    //---Calculating F[i,j]--------------------------------
     for(int i=0;i<ns_;i++){
         for(int j=0;j<ns_;j++){
             for(int type1=0;type1<2;type1++){
@@ -1223,7 +1329,7 @@ void Observables::Calculate_Exciton_Matrix(){
                                                         conj(Transformation(jm_state1,orb1+3*spin1)*(Hamiltonian_.Ham_(c1,n)))*
                                                         (Hamiltonian_.Ham_(c2,n)*Transformation(jm_state2,orb2+3*spin2))*
                                                         (1.0/( exp((Hamiltonian_.eigs_[n]-Parameters_.mus)*Parameters_.beta ) + 1.0))
-                                                        ).real();
+                                                        );// .real();
                                         }
                                     }
                                 }
@@ -1234,8 +1340,10 @@ void Observables::Calculate_Exciton_Matrix(){
             }
         }
     }
+    //-----------------------------------------------------------------------------------------
 
 
+    //----------Calculating Coherence Length----------------------------------------------------
     Coherence_Length_11=0.0;
     Coherence_Length_00=0.0;
     double num_, den_;
@@ -1267,9 +1375,51 @@ void Observables::Calculate_Exciton_Matrix(){
 
     Coherence_Length_00 = sqrt(num_/den_);
 
-
     cout<<"Coherence Length for excitons with m=1/2 : "<< Coherence_Length_11<<endl;
     cout<<"Coherence Length for excitons with m=-1/2 : "<< Coherence_Length_00<<endl;
+    //---------------------------------------------------------------------------
+
+
+    //--------------F[kx,ky]---------------------------------------------------
+    string Fq_out = "Fq.txt";
+    ofstream file_Fq_out(Fq_out.c_str());
+    file_Fq_out<<"#qx  qy   qx_index    qy_index   F0(qx,qy)  F1(qx,qy)"<<endl;
+
+    complex<double> F0_value, F1_value;
+
+
+    for(int qy=0;qy<ly_;qy++){
+        for(int qx=0;qx<lx_;qx++){
+            F0_value = zero_complex;
+            F1_value = zero_complex;
+            qx_ = (2.0*qx*PI)*(1.0/(1.0*lx_));
+            qy_ = (2.0*qy*PI)*(1.0/(1.0*ly_));
+
+            for(int ix=0;ix<lx_;ix++){
+                for(int iy=0;iy<ly_;iy++){
+                    site_i=Coordinates_.Nc(ix,iy);
+
+                    for(int jx=0;jx<lx_;jx++){
+                        for(int jy=0;jy<ly_;jy++){
+                            site_j=Coordinates_.Nc(jx,jy);
+
+                            F0_value += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                    F_Exciton[site_i][site_j][0][0]*(1.0/(1.0*ns_));
+                            F1_value += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                    F_Exciton[site_i][site_j][1][1]*(1.0/(1.0*ns_));
+
+                        }}
+                }}
+
+            file_Fq_out<<qx_<<"\t"<<qy_<<"\t"<<qx<<"\t"<<qy<<"\t"<<real(F0_value)<<"\t"<<imag(F0_value)<<"\t"<<real(F1_value)<<"\t"<<imag(F1_value)<<endl;
+
+        }
+        file_Fq_out<<endl;
+    }
+
+    //-------------------------------------------------------------
+
+
 
 }
 
