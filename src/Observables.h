@@ -1383,6 +1383,7 @@ void Observables::Calculate_Exciton_Matrix_and_Momentum_Distribution(){
     //--------------F[kx,ky]---------------------------------------------------
     string Fq_out = "Fq.txt";
     ofstream file_Fq_out(Fq_out.c_str());
+    file_Fq_out<<"#F(kx,ky) = F(K,K+(pi,pi))"<<endl;
     file_Fq_out<<"#qx  qy   qx_index    qy_index   F0(qx,qy)  F1(qx,qy)"<<endl;
 
     complex<double> F0_value, F1_value;
@@ -1403,9 +1404,13 @@ void Observables::Calculate_Exciton_Matrix_and_Momentum_Distribution(){
                         for(int jy=0;jy<ly_;jy++){
                             site_j=Coordinates_.Nc(jx,jy);
 
-                            F0_value += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                            F0_value += one_complex*((exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                                     (exp(iota_complex*( (jx*PI) + (jy*PI) )))
+                                                     )*
                                     F_Exciton[site_i][site_j][0][0]*(1.0/(1.0*ns_));
-                            F1_value += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                            F1_value += one_complex*((exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                                     (exp(iota_complex*( (jx*PI) + (jy*PI) )))
+                                                     )*
                                     F_Exciton[site_i][site_j][1][1]*(1.0/(1.0*ns_));
 
                         }}
