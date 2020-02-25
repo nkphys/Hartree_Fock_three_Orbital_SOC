@@ -212,7 +212,7 @@ double Hamiltonian::GetCLEnergy(){
                     col_ = Coordinates_.Nc_dof(site,alpha + 3*spin2);
                     row_ = Coordinates_.Nc_dof(site,alpha + 3*spin1);
                     EClassical += (-0.5)*(one_complex*
-                            (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin1])*
+                                          (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin1])*
                             (MFParams_.OParams_[site][alpha + 3*spin1][alpha + 3*spin2])*
                             (Parameters_.U_onsite)*(pow(-1.0,(1.0*(spin1-spin2))))).real();
                 }
@@ -229,14 +229,14 @@ double Hamiltonian::GetCLEnergy(){
                         col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                         row_=col_;
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin2][beta + 3*spin2])*
+                                              (MFParams_.OParams_[site][beta + 3*spin2][beta + 3*spin2])*
                                 (MFParams_.OParams_[site][alpha + 3*spin1][alpha + 3*spin1])*
                                 (Parameters_.U_prime_onsite - (0.5*Parameters_.J_Hund) )).real();
 
                         col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                         row_=col_;
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin2])*
+                                              (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin2])*
                                 (MFParams_.OParams_[site][beta + 3*spin1][beta + 3*spin1])*
                                 (Parameters_.U_prime_onsite - (0.5*Parameters_.J_Hund) )).real();
                     }
@@ -255,15 +255,15 @@ double Hamiltonian::GetCLEnergy(){
                         col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
+                                              (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
                                 (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin1])*
                                 (-1.0*(Parameters_.U_prime_onsite - (0.5*Parameters_.J_Hund)) )).real();
 
                         col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
-                       EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
-                               (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin1])*
+                        EClassical += (-0.5)*(one_complex*
+                                              (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
+                                (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin1])*
                                 (-1.0*(Parameters_.U_prime_onsite - (0.5*Parameters_.J_Hund)) )).real();
                     }
                 }
@@ -283,14 +283,14 @@ double Hamiltonian::GetCLEnergy(){
                             col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                             row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
                             EClassical += (-0.5)*(one_complex*
-                                    (MFParams_.OParams_[site][alpha + 3*spin1][alpha + 3*spin2])*
+                                                  (MFParams_.OParams_[site][alpha + 3*spin1][alpha + 3*spin2])*
                                     (MFParams_.OParams_[site][beta + 3*spin2][beta + 3*spin1])*
                                     ((-1.0*Parameters_.J_Hund) )).real();
 
                             col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                             row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
                             EClassical += (-0.5)*(one_complex*
-                                    (MFParams_.OParams_[site][beta + 3*spin1][beta + 3*spin2])*
+                                                  (MFParams_.OParams_[site][beta + 3*spin1][beta + 3*spin2])*
                                     (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin1])*
                                     ((-1.0*Parameters_.J_Hund) )).real();
                         }
@@ -299,14 +299,14 @@ double Hamiltonian::GetCLEnergy(){
                         col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin2])*
+                                              (MFParams_.OParams_[site][alpha + 3*spin2][alpha + 3*spin2])*
                                 (MFParams_.OParams_[site][beta + 3*spin1][beta + 3*spin1])*
                                 ((-0.5*Parameters_.J_Hund)*pow(-1.0,(spin1-spin2)*1.0))).real();
 
                         col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin2][beta + 3*spin2])*
+                                              (MFParams_.OParams_[site][beta + 3*spin2][beta + 3*spin2])*
                                 (MFParams_.OParams_[site][alpha + 3*spin1][alpha + 3*spin1])*
                                 ((-0.5*Parameters_.J_Hund)*pow(-1.0,(spin1-spin2)*1.0))).real();
 
@@ -327,14 +327,14 @@ double Hamiltonian::GetCLEnergy(){
                             col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                             row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                             EClassical += (-0.5)*(one_complex*
-                                    (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
+                                                  (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
                                     (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin1])*
                                     ((1.0*Parameters_.J_Hund) )).real();
 
                             col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                             row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                             EClassical += (-0.5)*(one_complex*
-                                    (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
+                                                  (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
                                     (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin1])*
                                     ((1.0*Parameters_.J_Hund) )).real();
                         }
@@ -343,14 +343,14 @@ double Hamiltonian::GetCLEnergy(){
                         col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
+                                              (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
                                 (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin1])*
                                 ((0.5*Parameters_.J_Hund)*pow(-1.0,(spin1-spin2)*1.0))).real();
 
                         col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
                         row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
                         EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
+                                              (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
                                 (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin1])*
                                 ((0.5*Parameters_.J_Hund)*pow(-1.0,(spin1-spin2)*1.0))).real();
 
@@ -367,33 +367,33 @@ double Hamiltonian::GetCLEnergy(){
                     for(int spin2=0;spin2<2;spin2++){
 
                         if(spin1 !=spin2){
-                        col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
-                        EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
-                                (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin1])*
-                                ((-1.0*Parameters_.J_Hund))).real();
+                            col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
+                            EClassical += (-0.5)*(one_complex*
+                                                  (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
+                                    (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin1])*
+                                    ((-1.0*Parameters_.J_Hund))).real();
 
-                        col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
-                        EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
-                                (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin1])*
-                                ((-1.0*Parameters_.J_Hund))).real();
+                            col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
+                            EClassical += (-0.5)*(one_complex*
+                                                  (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
+                                    (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin1])*
+                                    ((-1.0*Parameters_.J_Hund))).real();
 
-                        col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
-                                (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin1])*
-                                ((1.0*Parameters_.J_Hund))).real();
+                            col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            EClassical += (-0.5)*(one_complex*
+                                                  (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
+                                    (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin1])*
+                                    ((1.0*Parameters_.J_Hund))).real();
 
-                        col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        EClassical += (-0.5)*(one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
-                                (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin1])*
-                                ((1.0*Parameters_.J_Hund))).real();
+                            col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            EClassical += (-0.5)*(one_complex*
+                                                  (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
+                                    (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin1])*
+                                    ((1.0*Parameters_.J_Hund))).real();
 
                         }
                     }
@@ -571,29 +571,29 @@ void Hamiltonian::InteractionsCreate(){
                     for(int spin2=0;spin2<2;spin2++){
 
                         if(spin1 !=spin2){
-                        col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
-                        Ham_(row_,col_) += one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
-                                ((-1.0*Parameters_.J_Hund));
+                            col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,alpha + 3*spin2);
+                            Ham_(row_,col_) += one_complex*
+                                    (MFParams_.OParams_[site][alpha + 3*spin1][beta + 3*spin2])*
+                                    ((-1.0*Parameters_.J_Hund));
 
-                        col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
-                        Ham_(row_,col_) += one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
-                                ((-1.0*Parameters_.J_Hund));
+                            col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,beta + 3*spin2);
+                            Ham_(row_,col_) += one_complex*
+                                    (MFParams_.OParams_[site][beta + 3*spin1][alpha + 3*spin2])*
+                                    ((-1.0*Parameters_.J_Hund));
 
-                        col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        Ham_(row_,col_) += one_complex*
-                                (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
-                                ((1.0*Parameters_.J_Hund));
+                            col_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            Ham_(row_,col_) += one_complex*
+                                    (MFParams_.OParams_[site][alpha + 3*spin2][beta + 3*spin2])*
+                                    ((1.0*Parameters_.J_Hund));
 
-                        col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
-                        row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
-                        Ham_(row_,col_) += one_complex*
-                                (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
-                                ((1.0*Parameters_.J_Hund));
+                            col_=Coordinates_.Nc_dof(site,alpha + 3*spin1);
+                            row_=Coordinates_.Nc_dof(site,beta + 3*spin1);
+                            Ham_(row_,col_) += one_complex*
+                                    (MFParams_.OParams_[site][beta + 3*spin2][alpha + 3*spin2])*
+                                    ((1.0*Parameters_.J_Hund));
 
                         }
                     }
@@ -729,17 +729,23 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
     int my=Parameters_.TBC_my;
     complex<double> phasex, phasey;
     int l,m,a,b;
-    complex<double> Boundary_val;
+    complex<double> Boundary_val_X, Boundary_val_Y;
 
-    if(Parameters_.PBC==true){
-        Boundary_val=one_complex;
+    if(Parameters_.PBC_X==true){
+        Boundary_val_X=one_complex;
     }
     else{
-        Boundary_val=zero_complex;
+        Boundary_val_X=zero_complex;
+    }
+    if(Parameters_.PBC_Y==true){
+        Boundary_val_Y=one_complex;
+    }
+    else{
+        Boundary_val_Y=zero_complex;
     }
 
-    HTB_.fill(0.0);
 
+    HTB_.fill(zero_complex);
 
     if(!Parameters_.PNICTIDES_HOPPING){
         for(l=0;l<ns_;l++) {
@@ -748,7 +754,7 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
             if(Coordinates_.lx_>1){
 
                 if(Coordinates_.indx(l)==(Coordinates_.lx_ -1)){
-                    phasex=Boundary_val*exp(iota_complex*2.0*(1.0*mx)*PI/(1.0*Parameters_.TBC_cellsX));
+                    phasex=Boundary_val_X*exp(iota_complex*2.0*(1.0*mx)*PI/(1.0*Parameters_.TBC_cellsX));
                     phasey=one_complex;
                 }
                 else{
@@ -756,16 +762,19 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                     phasey=one_complex;
                 }
                 m = Coordinates_.neigh(l,0);
-                for(int spin_=0;spin_<2;spin_++){
-                    for (int orb1=0;orb1<3;orb1++){
-                        b=Coordinates_.Nc_dof(l,orb1 + spin_*3);
-                        for(int orb2=0;orb2<3;orb2++){
-                            a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
-                            //value*c^{\dagger}_{a}c_{b}
-                            assert (a!=b);
-                            if(a!=b){
-                                HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasex;
-                                HTB_(b,a)=conj(HTB_(a,b));
+
+                if(phasex != zero_complex){
+                    for(int spin_=0;spin_<2;spin_++){
+                        for (int orb1=0;orb1<3;orb1++){
+                            b=Coordinates_.Nc_dof(l,orb1 + spin_*3);
+                            for(int orb2=0;orb2<3;orb2++){
+                                a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
+                                //value*c^{\dagger}_{a}c_{b}
+                                assert (a!=b);
+                                if(a!=b){
+                                    HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasex;
+                                    HTB_(b,a)=conj(HTB_(a,b));
+                                }
                             }
                         }
                     }
@@ -778,7 +787,7 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
 
                 if(Coordinates_.indy(l)==(Coordinates_.ly_ -1)){
                     phasex=one_complex;
-                    phasey=Boundary_val*exp(iota_complex*2.0*(1.0*my)*PI/(1.0*Parameters_.TBC_cellsY));
+                    phasey=Boundary_val_Y*exp(iota_complex*2.0*(1.0*my)*PI/(1.0*Parameters_.TBC_cellsY));
                 }
                 else{
                     phasex=one_complex;
@@ -786,16 +795,18 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                 }
                 m = Coordinates_.neigh(l,2);
 
-                for(int spin_=0;spin_<2;spin_++){
-                    for (int orb1=0;orb1<3;orb1++){
-                        b=Coordinates_.Nc_dof(l,orb1 + spin_*3);
-                        for(int orb2=0;orb2<3;orb2++){
-                            a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
-                            //value*c^{\dagger}_{a}c_{b}
-                            assert (a!=b);
-                            if(a!=b){
-                                HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasey;
-                                HTB_(b,a)=conj(HTB_(a,b));
+                if(phasey != zero_complex){
+                    for(int spin_=0;spin_<2;spin_++){
+                        for (int orb1=0;orb1<3;orb1++){
+                            b=Coordinates_.Nc_dof(l,orb1 + spin_*3);
+                            for(int orb2=0;orb2<3;orb2++){
+                                a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
+                                //value*c^{\dagger}_{a}c_{b}
+                                assert (a!=b);
+                                if(a!=b){
+                                    HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasey;
+                                    HTB_(b,a)=conj(HTB_(a,b));
+                                }
                             }
                         }
                     }

@@ -16,7 +16,7 @@ public:
     double U_prime_onsite;
     double Lambda_SOC;
     double Disorder_Strength, RandomDisorderSeed;
-    bool PBC;
+    bool PBC_X, PBC_Y;
     bool PNICTIDES_HOPPING;
 
     double dw_dos, eta_dos;
@@ -52,7 +52,7 @@ void Parameters::Initialize(string inputfile_){
 
     double Simple_Mixing_double, Broyden_Mixing_double, BroydenSecondMethodMixing_double;
     double Read_OPs_double;
-    string PBC_string, Pnictides_Hopping_string;
+    string PBC_X_string, PBC_Y_string, Pnictides_Hopping_string;
 
     cout << "____________________________________" << endl;
     cout << "Reading the inputfile: " << inputfile_ << endl;
@@ -135,12 +135,19 @@ void Parameters::Initialize(string inputfile_){
     }
 
 
-    PBC_string=matchstring2(inputfile_,"PBC");
-    if(PBC_string=="true"){
-        PBC=true;
+    PBC_X_string=matchstring2(inputfile_,"PBC_X");
+    if(PBC_X_string=="true"){
+        PBC_X=true;
     }
     else{
-        PBC=false;
+        PBC_X=false;
+    }
+    PBC_Y_string=matchstring2(inputfile_,"PBC_Y");
+    if(PBC_Y_string=="true"){
+        PBC_Y=true;
+    }
+    else{
+        PBC_Y=false;
     }
 
     Pnictides_Hopping_string=matchstring2(inputfile_,"Pnictides_Hopping");
