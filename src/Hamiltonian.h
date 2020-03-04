@@ -729,6 +729,9 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
     int my=Parameters_.TBC_my;
     complex<double> phasex, phasey;
     int l,m,a,b;
+    int orb1_, orb2_;
+    double hopp_temp;
+
     complex<double> Boundary_val_X, Boundary_val_Y;
 
     if(Parameters_.PBC_X==true){
@@ -785,6 +788,8 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
             // * +y direction Neighbor
             if(Coordinates_.ly_>1){
 
+
+
                 if(Coordinates_.indy(l)==(Coordinates_.ly_ -1)){
                     phasex=one_complex;
                     phasey=Boundary_val_Y*exp(iota_complex*2.0*(1.0*my)*PI/(1.0*Parameters_.TBC_cellsY));
@@ -798,16 +803,37 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                 if(phasey != zero_complex){
                     for(int spin_=0;spin_<2;spin_++){
                         for (int orb1=0;orb1<3;orb1++){
+
                             b=Coordinates_.Nc_dof(l,orb1 + spin_*3);
                             for(int orb2=0;orb2<3;orb2++){
                                 a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
+
+
+                                hopp_temp = Parameters_.t2g_hopping_NN(orb2,orb1);
+
+                                //REMEMBER TO REMOVE lines below
+
+                                if(orb1!=orb2){
+                                assert(hopp_temp ==0);
+                                }
+
+                                if(orb1==orb2 && (orb1==0)){
+                                    hopp_temp = Parameters_.t2g_hopping_NN(1,1);
+                                }
+                                if(orb1==orb2 && (orb1==1)){
+                                    hopp_temp = Parameters_.t2g_hopping_NN(0,0);
+                                }
+
+                                //-----------------------------------//
+
                                 //value*c^{\dagger}_{a}c_{b}
                                 assert (a!=b);
                                 if(a!=b){
-                                    HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasey;
+                                    HTB_(a,b)=hopp_temp*phasey;
                                     HTB_(b,a)=conj(HTB_(a,b));
                                 }
                             }
+
                         }
                     }
                 }
