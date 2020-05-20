@@ -823,7 +823,6 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                                 if(orb1==orb2 && (orb1==1)){
                                     hopp_temp = Parameters_.t2g_hopping_NN(0,0);
                                 }
-
                                 //-----------------------------------//
 
                                 //value*c^{\dagger}_{a}c_{b}
