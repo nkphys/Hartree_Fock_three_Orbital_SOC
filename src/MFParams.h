@@ -194,13 +194,32 @@ void MFParams::initialize(){
     }
 
 
-    for(int j=0;j<ly_;j++){
-        for(int i=0;i<lx_;i++){
-            //RANDOM Disorder
-            Disorder(i,j)=Parameters_.Disorder_Strength*((2.0*random2())-1.0);
-            Disorder_conf_file<<i<<"  "<<j<<"  "<<Disorder(i,j)<<endl;
+    int temp_i, temp_j;
+    if(Parameters_.ReadDisorder==false){
+        cout <<"Disorder conf is initialized using random seed given in input file"<< endl;
+        for(int j=0;j<ly_;j++){
+            for(int i=0;i<lx_;i++){
+                //RANDOM Disorder
+                Disorder(i,j)=Parameters_.Disorder_Strength*((2.0*random2())-1.0);
+                Disorder_conf_file<<i<<"  "<<j<<"  "<<Disorder(i,j)<<endl;
+            }
+            Disorder_conf_file<<endl;
         }
-        Disorder_conf_file<<endl;
+    }
+    else{
+        cout<<"Disorder conf is read from file path given in the input file"<<endl;
+        ifstream Disorder_in_file(Parameters_.DisorderSeedFile);
+        for(int j=0;j<ly_;j++){
+            for(int i=0;i<lx_;i++){
+                //RANDOM Disorder
+                Disorder_in_file>>temp_i>>temp_j>>Disorder(i,j);
+                assert(i==temp_i);
+                assert(j==temp_j);
+                Disorder(i,j)=Parameters_.Disorder_Strength*(Disorder(i,j));
+                Disorder_conf_file<<i<<"  "<<j<<"  "<<Disorder(i,j)<<endl;
+            }
+            Disorder_conf_file<<endl;
+        }
     }
 
 

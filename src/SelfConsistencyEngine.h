@@ -116,8 +116,11 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
 
             //calculating mu
             n_states_occupied_zeroT=Parameters_.Total_Particles;
+
             initial_mu_guess=0.5*(Hamiltonian_.eigs_[n_states_occupied_zeroT-1] + Hamiltonian_.eigs_[n_states_occupied_zeroT]);
+
             Parameters_.mus=Hamiltonian_.chemicalpotential(initial_mu_guess,Parameters_.Total_Particles);
+
             Parameters_.mu_old=Parameters_.mus;
 
             //Getting order params using mu for N particles

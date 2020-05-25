@@ -1102,6 +1102,9 @@ void Observables::Calculate_IPR(){
 
 
 void Observables::Calculate_Local_n_orb_resolved(){
+
+    double N_total_temp=0.0;
+
     Local_n_orb_resolved.resize(ns_*6);
 
     int c1;
@@ -1120,10 +1123,18 @@ void Observables::Calculate_Local_n_orb_resolved(){
                                 ).real();
                 }
 
+                N_total_temp +=Local_n_orb_resolved[c1];
+
             }
         }
 
     }
+
+    cout<<"Total number of particles calculated = "<<N_total_temp<<endl;
+    cout<<"Mu (Chemical Potential) = "<<Parameters_.mus<<endl;
+
+    if(Parameters_.FixingMu){
+        Parameters_.Total_Particles = N_total_temp;}
 
 }
 
@@ -1263,19 +1274,19 @@ void Observables::Calculate_Exciton_Matrix_and_Momentum_Distribution(){
 
             for(int type=0;type<4;type++){
 
-            for(int ix=0;ix<lx_;ix++){
-                for(int iy=0;iy<ly_;iy++){
-                    site_i=Coordinates_.Nc(ix,iy);
+                for(int ix=0;ix<lx_;ix++){
+                    for(int iy=0;iy<ly_;iy++){
+                        site_i=Coordinates_.Nc(ix,iy);
 
-                    for(int jx=0;jx<lx_;jx++){
-                        for(int jy=0;jy<ly_;jy++){
-                            site_j=Coordinates_.Nc(jx,jy);
+                        for(int jx=0;jx<lx_;jx++){
+                            for(int jy=0;jy<ly_;jy++){
+                                site_j=Coordinates_.Nc(jx,jy);
 
-                            N_value[type] += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
-                                    OccN[site_i][site_j][type]*(1.0/(1.0*ns_));
+                                N_value[type] += one_complex*(exp(iota_complex*(-1.0)*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                        OccN[site_i][site_j][type]*(1.0/(1.0*ns_));
 
-                        }}
-                }}
+                            }}
+                    }}
             }
 
 

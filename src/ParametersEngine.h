@@ -11,6 +11,8 @@ public:
     int TBC_cellsX, TBC_cellsY;
     int lx_cluster, ly_cluster;
     double mus,Total_Particles,pi, mu_old;
+    double MuValueFixed;
+    bool FixingMu;
     double J_Hund;
     double U_onsite;
     double U_prime_onsite;
@@ -36,6 +38,11 @@ public:
     double alpha_OP;
 
     double Temperature,beta,Eav,maxmoment;
+
+    bool ReadDisorder;
+    string ReadDisorderString, FixingMuString;
+    string DisorderSeedFile;
+
 
     char Dflag;
 
@@ -77,7 +84,9 @@ void Parameters::Initialize(string inputfile_){
     IterMax = int(matchstring(inputfile_,"No_of_SelfConsistency_iters"));
     Convergence_Error=matchstring(inputfile_,"Convergence_Error");
     RandomSeed = matchstring(inputfile_,"RandomSeed");
+    FixingMuString = matchstring2(inputfile_, "FixingMu");
     RandomDisorderSeed = matchstring(inputfile_,"RandomDisorderSeed");
+    ReadDisorderString = matchstring2(inputfile_,"ReadDisorderConf");
     Disorder_Strength = matchstring(inputfile_,"Disorder_Strength");
     J_Hund = matchstring(inputfile_,"J_HUND");
     U_onsite = matchstring(inputfile_,"U_Onsite");
@@ -102,6 +111,24 @@ void Parameters::Initialize(string inputfile_){
     Broyden_Mixing_double=double(matchstring(inputfile_,"Broyden_Mixing"));
     BroydenSecondMethodMixing_double=double(matchstring(inputfile_,"Broyden_Second_Method_Mixing"));
 
+
+
+    if(FixingMuString=="true"){
+        FixingMu=true;
+        MuValueFixed = matchstring(inputfile_,"MuValueFixed");
+    }
+    else{
+        FixingMu=false;
+        MuValueFixed=-100000;
+    }
+
+    if(ReadDisorderString=="true"){
+        ReadDisorder = true;
+        DisorderSeedFile = matchstring2(inputfile_,"DisorderSeedFile");
+    }
+    else{
+        ReadDisorder = false;
+    }
 
     if(BroydenSecondMethodMixing_double==1.0){
          BroydenSecondMethodMixing=true;
