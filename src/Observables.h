@@ -57,6 +57,7 @@ public:
     void Calculate_SpinSpincorrelations();
     void Calculate_SpinSpincorrelations_Smartly();
     void Calculate_Orbitalcorrelations_Smartly();
+    void Calculate_TauZ_correlations();
     void Calculate_Excitoncorrelations_Smartly();
     void Calculate_IPR();
     void Calculate_Optical_Conductivity();
@@ -3094,6 +3095,145 @@ void Observables::Calculate_Single_Particle_Density_Matrix(){
             }
         }
     }
+
+}
+
+void Observables::Calculate_TauZ_correlations(){
+    int YZ_,XZ_,XY_;
+    YZ_=0; XZ_=1; XY_=2;
+
+    int UP_, DOWN_;
+    UP_=0;DOWN_=1;
+
+    Mat_2_Complex_doub TauZ;
+    TauZ.clear();
+    TauZ.resize(6);
+    for(int i=0;i<6;i++){
+        TauZ[i].resize(6);
+    }
+
+
+    //TauZ= 0.5*(n_yz - n_xz)
+
+    for(int spin=0;spin<2;spin++){
+    TauZ[YZ_ + 3*spin][YZ_ + 3*spin] = 0.5;
+    TauZ[XZ_ + 3*spin][XZ_ + 3*spin] = -0.5;
+    }
+
+
+    Mat_2_Complex_doub TauZTauZ_ri_rj;
+    TauZTauZ_ri_rj.resize(ns_);
+    for(int site_i=0;site_i<ns_;site_i++){
+        TauZTauZ_ri_rj[site_i].resize(ns_);
+    }
+
+
+    string TauZ2_out = "Local_TauZ2.txt";
+    ofstream file_TauZ2_out(TauZ2_out.c_str());
+    file_TauZ2_out<<"#site_i    ix   iy   TauZ^2[site_i]"<<endl;
+
+    string TauZq_out = "TauZq.txt";
+    ofstream file_TauZq_out(TauZq_out.c_str());
+    file_TauZq_out<<"#qx  qy   qx_index    qy_index   TauZ(qx,qy)"<<endl;
+
+    string TauZTauZr_out = "TauZTauZr.txt";
+    ofstream file_TauZTauZr_out(TauZTauZr_out.c_str());
+    file_TauZTauZr_out<<"#site_i   site_i(x)    site_i(y)    site_j   site_j(x)    site_j(y)  TauZTauZ[site_i][site_j]"<<endl;
+
+
+    int i1,i2,j1,j2;
+
+    complex<double> temp_val_TauZTauZ;
+    for(int i=0;i<ns_;i++){
+        for(int j=0;j<ns_;j++){
+            temp_val_TauZTauZ = zero_complex;
+
+            for(int i_row=0;i_row<6;i_row++){
+                for(int i_col=0;i_col<6;i_col++){
+
+                    for(int j_row=0;j_row<6;j_row++){
+                        for(int j_col=0;j_col<6;j_col++){
+
+                            //TauZ x TauZ
+
+                                if( (TauZ[i_row][i_col] !=zero_complex)
+                                        &&
+                                        (TauZ[j_row][j_col] !=zero_complex)   ){
+                                    i1=Coordinates_.Nc_dof(i,i_row);
+                                    i2=Coordinates_.Nc_dof(i,i_col);
+                                    j1=Coordinates_.Nc_dof(j,j_row);
+                                    j2=Coordinates_.Nc_dof(j,j_col);
+                                    temp_val_TauZTauZ += TauZ[i_row][i_col]*TauZ[j_row][j_col]*
+                                            Two_particle_Den_Mat(i1,i2,j1,j2);
+                                }
+                        }
+                    }
+                }
+            }
+
+
+            file_TauZTauZr_out<<i<<setw(15)<<Coordinates_.indx(i)<<setw(15)<<Coordinates_.indy(i)<<setw(15)<<j<<setw(15)<<Coordinates_.indx(j)<<setw(15)<<Coordinates_.indy(j)<<
+                            setw(15)<<temp_val_TauZTauZ.real()
+                            <<endl;
+            TauZTauZ_ri_rj[i][j]=temp_val_TauZTauZ;
+
+        }
+    }
+
+
+
+    double qx_, qy_;
+    complex<double> value;
+    int site_i, site_j;
+
+
+    for(int qy=0;qy<ly_;qy++){
+        for(int qx=0;qx<lx_;qx++){
+            value = zero_complex;
+            qx_ = (2.0*qx*PI)*(1.0/(1.0*lx_));
+            qy_ = (2.0*qy*PI)*(1.0/(1.0*ly_));
+
+            for(int ix=0;ix<lx_;ix++){
+                for(int iy=0;iy<ly_;iy++){
+                    site_i=Coordinates_.Nc(ix,iy);
+
+                    for(int jx=0;jx<lx_;jx++){
+                        for(int jy=0;jy<ly_;jy++){
+                            site_j=Coordinates_.Nc(jx,jy);
+
+                            value += one_complex*(exp(iota_complex*( (qx_*(ix - jx)) + (qy_*(iy-jy)) )))*
+                                    TauZTauZ_ri_rj[site_i][site_j]*(1.0/(1.0*ns_));
+
+                        }}
+                }}
+
+            file_TauZq_out<<qx_<<"\t"<<qy_<<"\t"<<qx<<"\t"<<qy<<"\t"<<real(value)<<"\t"<<imag(value)<<endl;
+
+        }
+        file_TauZq_out<<endl;
+
+    }
+
+
+
+    complex<double> Avg_TauZ2=0.0;
+
+    for(int ix=0;ix<lx_;ix++){
+        for(int iy=0;iy<ly_;iy++){
+            site_i=Coordinates_.Nc(ix,iy);
+            file_TauZ2_out<<site_i<<"\t"<<ix<<"\t"<<iy<<"\t"<<real(TauZTauZ_ri_rj[site_i][site_i])
+                      <<"\t"<<imag(TauZTauZ_ri_rj[site_i][site_i])<<endl;
+
+            Avg_TauZ2 += one_complex*(TauZTauZ_ri_rj[site_i][site_i]);
+        }
+        file_TauZ2_out<<endl;
+    }
+
+    cout<<"Avg Local Moment (TauZ^2) = "<<real(Avg_TauZ2)/(1.0*ns_)<<"\t"<<imag(Avg_TauZ2)/(1.0*ns_)<<endl;
+
+
+
+
 
 }
 

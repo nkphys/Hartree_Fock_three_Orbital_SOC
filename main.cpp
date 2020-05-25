@@ -96,6 +96,7 @@ int main(int argc, char *argv[]) {
 
        Observables_.Calculate_SpinSpincorrelations_Smartly();
        Observables_.Calculate_Orbitalcorrelations_Smartly();
+       Observables_.Calculate_TauZ_correlations();
         // Observables_.Calculate_Excitoncorrelations_Smartly();
          // Observables_.Calculate_Exciton_Matrix_and_Momentum_Distribution();
        //   Observables_.Calculate_Akw_t2g();

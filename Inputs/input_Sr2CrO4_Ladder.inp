@@ -6,9 +6,9 @@ TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=4
 TBC_cellsY=4
-Total No. of particles=2
+Total No. of particles=72
 FixingMu=true
-MuValueFixed=5.1619459
+MuValueFixed=7.10207697
 RandomSeed=2
 
 Pnictides_Hopping=false
@@ -33,9 +33,9 @@ wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=0.0
-U_Onsite=0.0
-U_prime_Onsite=0.0
+J_HUND=1.5
+U_Onsite=6.0
+U_prime_Onsite=3.0
 Lambda_SOC=0.0
 
 
