@@ -27,7 +27,9 @@ public:
     bool Read_OPs;
     string File_OPs_in, File_OPs_out;
 
-    Matrix<double> t2g_hopping_NN;
+    Matrix<double> t2g_hopping_NN_X;
+    Matrix<double> t2g_hopping_NN_Y;
+
     Mat_1_doub Crystal_Field;
 
     bool Simple_Mixing;
@@ -188,23 +190,40 @@ void Parameters::Initialize(string inputfile_){
     File_OPs_in=matchstring2(inputfile_,"Read_initial_OPvalues_file");
     File_OPs_out=matchstring2(inputfile_,"Write_Final_OPvalues_file");
 
-    string Nearest_Neigh_Hopping_t2g_basis_row0;
-    string Nearest_Neigh_Hopping_t2g_basis_row1;
-    string Nearest_Neigh_Hopping_t2g_basis_row2;
+    string Nearest_Neigh_Hopping_t2g_basis_row0_X;
+    string Nearest_Neigh_Hopping_t2g_basis_row1_X;
+    string Nearest_Neigh_Hopping_t2g_basis_row2_X;
+    string Nearest_Neigh_Hopping_t2g_basis_row0_Y;
+    string Nearest_Neigh_Hopping_t2g_basis_row1_Y;
+    string Nearest_Neigh_Hopping_t2g_basis_row2_Y;
 
-    Nearest_Neigh_Hopping_t2g_basis_row0=matchstring2(inputfile_, "Nearest_Neigh_Hopping_t2g_basis_row0");
-    Nearest_Neigh_Hopping_t2g_basis_row1=matchstring2(inputfile_, "Nearest_Neigh_Hopping_t2g_basis_row1");
-    Nearest_Neigh_Hopping_t2g_basis_row2=matchstring2(inputfile_, "Nearest_Neigh_Hopping_t2g_basis_row2");
 
-    stringstream t2g_row0_stream(Nearest_Neigh_Hopping_t2g_basis_row0);
-    stringstream t2g_row1_stream(Nearest_Neigh_Hopping_t2g_basis_row1);
-    stringstream t2g_row2_stream(Nearest_Neigh_Hopping_t2g_basis_row2);
+    Nearest_Neigh_Hopping_t2g_basis_row0_X=matchstring2(inputfile_, "Nearest_Neigh_Hopping_X_t2g_basis_row0");
+    Nearest_Neigh_Hopping_t2g_basis_row1_X=matchstring2(inputfile_, "Nearest_Neigh_Hopping_X_t2g_basis_row1");
+    Nearest_Neigh_Hopping_t2g_basis_row2_X=matchstring2(inputfile_, "Nearest_Neigh_Hopping_X_t2g_basis_row2");
+    Nearest_Neigh_Hopping_t2g_basis_row0_Y=matchstring2(inputfile_, "Nearest_Neigh_Hopping_Y_t2g_basis_row0");
+    Nearest_Neigh_Hopping_t2g_basis_row1_Y=matchstring2(inputfile_, "Nearest_Neigh_Hopping_Y_t2g_basis_row1");
+    Nearest_Neigh_Hopping_t2g_basis_row2_Y=matchstring2(inputfile_, "Nearest_Neigh_Hopping_Y_t2g_basis_row2");
 
-    t2g_hopping_NN.resize(3,3);
+    stringstream t2g_row0_stream_X(Nearest_Neigh_Hopping_t2g_basis_row0_X);
+    stringstream t2g_row1_stream_X(Nearest_Neigh_Hopping_t2g_basis_row1_X);
+    stringstream t2g_row2_stream_X(Nearest_Neigh_Hopping_t2g_basis_row2_X);
+    stringstream t2g_row0_stream_Y(Nearest_Neigh_Hopping_t2g_basis_row0_Y);
+    stringstream t2g_row1_stream_Y(Nearest_Neigh_Hopping_t2g_basis_row1_Y);
+    stringstream t2g_row2_stream_Y(Nearest_Neigh_Hopping_t2g_basis_row2_Y);
+
+    t2g_hopping_NN_X.resize(3,3);
     for(int n=0;n<3;n++){
-        t2g_row0_stream >> t2g_hopping_NN(0,n);
-        t2g_row1_stream >> t2g_hopping_NN(1,n);
-        t2g_row2_stream >> t2g_hopping_NN(2,n);
+        t2g_row0_stream_X >> t2g_hopping_NN_X(0,n);
+        t2g_row1_stream_X >> t2g_hopping_NN_X(1,n);
+        t2g_row2_stream_X >> t2g_hopping_NN_X(2,n);
+    }
+
+    t2g_hopping_NN_Y.resize(3,3);
+    for(int n=0;n<3;n++){
+        t2g_row0_stream_Y >> t2g_hopping_NN_Y(0,n);
+        t2g_row1_stream_Y >> t2g_hopping_NN_Y(1,n);
+        t2g_row2_stream_Y >> t2g_hopping_NN_Y(2,n);
     }
 
 

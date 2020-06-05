@@ -785,7 +785,7 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                                 //value*c^{\dagger}_{a}c_{b}
                                 assert (a!=b);
                                 if(a!=b){
-                                    HTB_(a,b)=Parameters_.t2g_hopping_NN(orb2,orb1)*phasex;
+                                    HTB_(a,b)=Parameters_.t2g_hopping_NN_X(orb2,orb1)*phasex;
                                     HTB_(b,a)=conj(HTB_(a,b));
                                 }
                             }
@@ -818,27 +818,10 @@ yz_up(site=0),xz_up(site=0),xy_up(site=0), yz_dn(site=0),xz_dn(site=0),xy_dn(sit
                             for(int orb2=0;orb2<3;orb2++){
                                 a=Coordinates_.Nc_dof(m,orb2 + spin_*3);
 
-
-                                hopp_temp = Parameters_.t2g_hopping_NN(orb2,orb1);
-
-                                //REMEMBER TO REMOVE lines below
-
-                                if(orb1!=orb2){
-                                    assert(hopp_temp ==0);
-                                }
-
-                                if(orb1==orb2 && (orb1==0)){
-                                    hopp_temp = Parameters_.t2g_hopping_NN(1,1);
-                                }
-                                if(orb1==orb2 && (orb1==1)){
-                                    hopp_temp = Parameters_.t2g_hopping_NN(0,0);
-                                }
-                                //-----------------------------------//
-
                                 //value*c^{\dagger}_{a}c_{b}
                                 assert (a!=b);
                                 if(a!=b){
-                                    HTB_(a,b)=hopp_temp*phasey;
+                                    HTB_(a,b)=Parameters_.t2g_hopping_NN_Y(orb2,orb1)*phasey;
                                     HTB_(b,a)=conj(HTB_(a,b));
                                 }
                             }
