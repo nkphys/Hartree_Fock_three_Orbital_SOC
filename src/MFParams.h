@@ -570,6 +570,47 @@ void MFParams::initialize(){
 
             }
 
+            if(Parameters_.Create_OPs_type=="T4_AFM_perp"){
+
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                double spin_direction;
+                double OP_temp;
+                OP_temp=0.4;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indy(i);
+                    iy=Coordinates_.indx(i);
+                    spin_direction = 1.0*(pow(-1.0, 1.0*(ix+iy)));
+
+                    if(iy%2==0){  //stripe along x with e in yz,xy
+                        OParams_[i][YZ_ + 3*UP_][YZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][YZ_ + 3*DOWN_][YZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                        OParams_[i][YZ_ + 3*UP_][YZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                    }
+                    else{ //stripe along x with e in xz,xy
+                        OParams_[i][XZ_ + 3*UP_][XZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][XZ_ + 3*DOWN_][XZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                        OParams_[i][XZ_ + 3*UP_][XZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                    }
+                }
+
+            }
+
 
 
             if(Parameters_.Create_OPs_type=="T5_AFM"){
