@@ -1,12 +1,12 @@
-PBC_X=false
-PBC_Y=false
-Xsite=16
-Ysite=2
+PBC_X=true
+PBC_Y=true
+Xsite=12
+Ysite=12
 TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
 TBC_cellsX=6
 TBC_cellsY=6
-Total No. of particles=64
+Total No. of particles=288
 FixingMu=false
 MuValueFixed=7.10207697
 RandomSeed=4
@@ -39,9 +39,9 @@ wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=0.8
-U_Onsite=4.0
-U_prime_Onsite=2.4
+J_HUND=0.4
+U_Onsite=2.0
+U_prime_Onsite=1.2
 Lambda_SOC=0.0
 
 
@@ -51,10 +51,10 @@ w_min=-5.0
 w_max=15.0
 
 No_of_SelfConsistency_iters=5000
-Convergence_Error=0.0001
+Convergence_Error=0.00001
 Read_initial_OPvalues=0
 Read_initial_OPvalues_file=OrderParams_OUTPUT_Temp0.18.txt
 Just_Hartree=0
 Create_OPvalues=1
-Create_OPType=T4_AFM_perp
+Create_OPType=T1_AFM
 Write_Final_OPvalues_file=OrderParams_OUTPUT.txt

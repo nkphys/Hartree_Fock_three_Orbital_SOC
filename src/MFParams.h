@@ -208,6 +208,88 @@ void MFParams::initialize(){
 
             }
 
+            if(Parameters_.Create_OPs_type=="T1_SMixed_perp"){
+
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                double spin_direction;
+                double OP_temp;
+                OP_temp=0.4;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indy(i);
+                    iy=Coordinates_.indx(i);
+
+
+                    if(ix%2==0){  //alternating holes in yz and xy
+
+                        if(ix%4==0){
+                            spin_direction = 1.0;
+                            if(iy%2==0){ //xz,xy
+
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*DOWN_][XZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                                OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                                OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+
+                            }
+                            else{ //xz, yz
+                                OParams_[i][YZ_ + 3*UP_][YZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][YZ_ + 3*DOWN_][YZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*DOWN_][XZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                                OParams_[i][YZ_ + 3*UP_][YZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+
+                            }
+                        }
+                        else{
+                            spin_direction = -1.0;
+                            if(iy%2==0){//yz,xz
+                                OParams_[i][YZ_ + 3*UP_][YZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][YZ_ + 3*DOWN_][YZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*DOWN_][XZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                                OParams_[i][YZ_ + 3*UP_][YZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                            }
+                            else{ //xz,xy
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                                OParams_[i][XZ_ + 3*DOWN_][XZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                                OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                                OParams_[i][XZ_ + 3*UP_][XZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                                OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                            }
+                        }
+
+                    }
+                    else{  //stripe along x for this y with hole in xz
+                        spin_direction = -1.0*(pow(-1.0, 1.0*iy));
+                        OParams_[i][YZ_ + 3*UP_][YZ_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                        OParams_[i][YZ_ + 3*DOWN_][YZ_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                        OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                        OParams_[i][YZ_ + 3*UP_][YZ_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                        OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                    }
+                }
+
+            }
+
 
             if(Parameters_.Create_OPs_type=="T1p_Spipi_0pi"){
 
