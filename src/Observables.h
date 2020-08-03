@@ -77,6 +77,7 @@ public:
     void Calculate_Local_n_orb_resolved();
     void Get_OrderParameters_diffs();
     void Update_OrderParameters(int iter);
+    void Hartree_Filter();
     void Update_OrderParameters_Second_Broyden(int iter_count);
     void Invert_Beta();
     void Invert_Beta_double();
@@ -239,6 +240,21 @@ void Observables::Get_OrderParameters_diffs(){
     }
 
     Error_OP_=sqrt(Error_OP_);
+
+}
+
+
+void Observables::Hartree_Filter(){
+
+    for(int site=0;site<ns_;site++){
+        for(int state1=0;state1<6;state1++){
+            for(int state2=0;state2<6;state2++){
+                if(state2!=state1){
+                    MFParams_.OParams_[site][state2][state1] = zero_complex;
+                }
+            }
+        }
+    }
 
 }
 
@@ -2630,11 +2646,13 @@ void Observables::Calculate_SpinSpincorrelations_Smartly(){
     complex<double> value;
 
 
-    for(int qy=0;qy<ly_;qy++){
-        for(int qx=0;qx<lx_;qx++){
+    for(int qy_temp=0;qy_temp<ly_+1;qy_temp++){
+        for(int qx_temp=0;qx_temp<lx_+1;qx_temp++){
             value = zero_complex;
-            qx_ = (2.0*qx*PI)*(1.0/(1.0*lx_));
-            qy_ = (2.0*qy*PI)*(1.0/(1.0*ly_));
+
+
+            qx_ = (2.0*qx_temp*PI)*(1.0/(1.0*lx_));
+            qy_ = (2.0*qy_temp*PI)*(1.0/(1.0*ly_));
 
             for(int ix=0;ix<lx_;ix++){
                 for(int iy=0;iy<ly_;iy++){
@@ -2650,7 +2668,7 @@ void Observables::Calculate_SpinSpincorrelations_Smartly(){
                         }}
                 }}
 
-            file_Sq_out<<qx_<<"\t"<<qy_<<"\t"<<qx<<"\t"<<qy<<"\t"<<real(value)<<"\t"<<imag(value)<<endl;
+            file_Sq_out<<qx_<<"\t"<<qy_<<"\t"<<qx_temp<<"\t"<<qy_temp<<"\t"<<real(value)<<"\t"<<imag(value)<<endl;
 
         }
         file_Sq_out<<endl;
@@ -3187,11 +3205,12 @@ void Observables::Calculate_TauZ_correlations(){
     int site_i, site_j;
 
 
-    for(int qy=0;qy<ly_;qy++){
-        for(int qx=0;qx<lx_;qx++){
+    for(int qy_temp=0;qy_temp<ly_+1;qy_temp++){
+        for(int qx_temp=0;qx_temp<lx_+1;qx_temp++){
+
             value = zero_complex;
-            qx_ = (2.0*qx*PI)*(1.0/(1.0*lx_));
-            qy_ = (2.0*qy*PI)*(1.0/(1.0*ly_));
+            qx_ = (2.0*qx_temp*PI)*(1.0/(1.0*lx_));
+            qy_ = (2.0*qy_temp*PI)*(1.0/(1.0*ly_));
 
             for(int ix=0;ix<lx_;ix++){
                 for(int iy=0;iy<ly_;iy++){
@@ -3207,7 +3226,7 @@ void Observables::Calculate_TauZ_correlations(){
                         }}
                 }}
 
-            file_TauZq_out<<qx_<<"\t"<<qy_<<"\t"<<qx<<"\t"<<qy<<"\t"<<real(value)<<"\t"<<imag(value)<<endl;
+            file_TauZq_out<<qx_<<"\t"<<qy_<<"\t"<<qx_temp<<"\t"<<qy_temp<<"\t"<<real(value)<<"\t"<<imag(value)<<endl;
 
         }
         file_TauZq_out<<endl;

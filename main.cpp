@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
         SelfConsistencyEngine SelfConsistencyEngine_(Parameters_,Coordinates_,MFParams_,Hamiltonian_,Observables_);
         SelfConsistencyEngine_.RUN_SelfConsistencyEngine();
         //Observables_.Calculate_Local_Density();
-        Observables_.Calculate_Nw_t2g();
+        //Observables_.Calculate_Nw_t2g();
         //Observables_.Calculate_Nw_jm();
 
         //Observables_.Calculate_IPR();

@@ -25,7 +25,11 @@ public:
     double w_min, w_max;
 
     bool Read_OPs;
+    bool Create_OPs;
+    bool Just_Hartree;
     string File_OPs_in, File_OPs_out;
+    string Create_OPs_type;
+
 
     Matrix<double> t2g_hopping_NN_X;
     Matrix<double> t2g_hopping_NN_Y;
@@ -61,6 +65,8 @@ void Parameters::Initialize(string inputfile_){
 
     double Simple_Mixing_double, Broyden_Mixing_double, BroydenSecondMethodMixing_double;
     double Read_OPs_double;
+    double Create_OPs_double;
+    double Just_Hartree_double;
     string PBC_X_string, PBC_Y_string, Pnictides_Hopping_string;
 
     cout << "____________________________________" << endl;
@@ -94,6 +100,7 @@ void Parameters::Initialize(string inputfile_){
     U_onsite = matchstring(inputfile_,"U_Onsite");
     U_prime_onsite = matchstring(inputfile_,"U_prime_Onsite");
     Lambda_SOC = matchstring(inputfile_, "Lambda_SOC");
+    Temperature = matchstring(inputfile_,"Temperature");
 
     //dw_dos, eta_dos
     dw_dos = matchstring(inputfile_, "dw_dos");
@@ -162,6 +169,28 @@ void Parameters::Initialize(string inputfile_){
     else{
         Read_OPs=false;
     }
+
+
+
+
+    Just_Hartree_double=double(matchstring(inputfile_,"Just_Hartree"));
+    if(Just_Hartree_double==1.0){
+        Just_Hartree=true;
+    }
+    else{
+        Just_Hartree=false;
+    }
+
+    Create_OPs_double=double(matchstring(inputfile_,"Create_OPvalues"));
+    if(Create_OPs_double==1.0){
+        assert(!Read_OPs);
+        Create_OPs=true;
+    Create_OPs_type=matchstring2(inputfile_,"Create_OPType");
+    }
+    else{
+        Create_OPs=false;
+    }
+
 
 
     PBC_X_string=matchstring2(inputfile_,"PBC_X");
@@ -241,7 +270,7 @@ void Parameters::Initialize(string inputfile_){
     pi=4.00*atan(double(1.0));
     Eav=0.0;
 
-    Temperature=0.0001;
+
     //beta=(11605.0/Temperature);
      beta=(1.0/Temperature);
 

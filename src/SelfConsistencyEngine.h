@@ -92,6 +92,8 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
     */
 
 
+
+
     double Error_OP=100;
 
     for(int count=0;count<Parameters_.IterMax;count++){
@@ -105,11 +107,11 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
             // Hamiltonian_.Ham_.print();
             //Hamiltonian_.Check_Hermiticity();
             Hamiltonian_.Diagonalize(Parameters_.Dflag);
-//             if(count==0){
-//                 n_states_occupied_zeroT=Parameters_.Total_Particles;
-//                 initial_mu_guess=0.5*(Hamiltonian_.eigs_[n_states_occupied_zeroT-1] + Hamiltonian_.eigs_[n_states_occupied_zeroT]);
-//                 Parameters_.mus=Hamiltonian_.chemicalpotential(initial_mu_guess,Parameters_.Total_Particles);
-//             }
+            //             if(count==0){
+            //                 n_states_occupied_zeroT=Parameters_.Total_Particles;
+            //                 initial_mu_guess=0.5*(Hamiltonian_.eigs_[n_states_occupied_zeroT-1] + Hamiltonian_.eigs_[n_states_occupied_zeroT]);
+            //                 Parameters_.mus=Hamiltonian_.chemicalpotential(initial_mu_guess,Parameters_.Total_Particles);
+            //             }
 
 
 
@@ -125,9 +127,6 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
 
             //Getting order params using mu for N particles
             Observables_.Calculate_Order_Params();
-
-
-
 
             Curr_QuantE = Hamiltonian_.E_QM();
             Curr_ClassicalE = Hamiltonian_.GetCLEnergy();
@@ -152,6 +151,10 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
                 Observables_.Update_OrderParameters(count);
             }
 
+            if(Parameters_.Just_Hartree){
+                    Observables_.Hartree_Filter();
+            }
+
 
         }
 
@@ -173,10 +176,16 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
     file_out_Local_orb_densities<<"#site     ix    iy    yz(orb=0),up   yz(orb=0),dn   xz(orb=1),up   xz(orb=1),dn   xy(orb=2),up   xy(orb=2),dn"<<endl;
     int c1;
     int site_i;
-    for(int iy=0;iy<ly_;iy++){
-        for(int ix=0;ix<lx_;ix++){
+    for(int iy_temp=0;iy_temp<ly_+1;iy_temp++){
+        for(int ix_temp=0;ix_temp<lx_+1;ix_temp++){
+            int ix, iy;
+            if(iy_temp==ly_){iy = iy_temp-1;}
+            else{iy=iy_temp;}
+            if(ix_temp==lx_){ix = ix_temp-1;}
+            else{ix=ix_temp;}
+
             site_i=Coordinates_.Nc(ix,iy);
-            file_out_Local_orb_densities<<site_i<<setw(15)<<ix<<setw(15)<<iy;
+            file_out_Local_orb_densities<<site_i<<setw(15)<<ix_temp<<setw(15)<<iy_temp;
             for(int orb=0;orb<3;orb++){
                 for(int spin=0;spin<2;spin++){
 
@@ -187,7 +196,7 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
             file_out_Local_orb_densities<<endl;
 
         }
-    file_out_Local_orb_densities<<endl;
+        file_out_Local_orb_densities<<endl;
     }
 
 
@@ -206,7 +215,7 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
                 for(int state2=state1;state2<6;state2++){
 
                     file_out_Local_OP<<site_i<<setw(15)<<ix<<setw(15)<<iy<<setw(15)<<state1<<setw(15)<<state2<<setw(15)<<
-                                              Observables_.OParams[site_i][state1][state2].real()<<setw(15)<<Observables_.OParams[site_i][state1][state2].imag()<<endl;
+                                       Observables_.OParams[site_i][state1][state2].real()<<setw(15)<<Observables_.OParams[site_i][state1][state2].imag()<<endl;
                 }
             }
         }
