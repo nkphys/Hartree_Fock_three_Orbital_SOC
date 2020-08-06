@@ -33,6 +33,8 @@ public:
 
     Matrix<double> t2g_hopping_NN_X;
     Matrix<double> t2g_hopping_NN_Y;
+    Matrix<double> t2g_hopping_NNN_PXPY;
+    Matrix<double> t2g_hopping_NNN_PXMY;
 
     Mat_1_doub Crystal_Field;
 
@@ -255,6 +257,48 @@ void Parameters::Initialize(string inputfile_){
         t2g_row2_stream_Y >> t2g_hopping_NN_Y(2,n);
     }
 
+
+
+    //Next Nearest hopping------------
+
+    string NNN_t2g_basis_row0_PXPY;
+    string NNN_t2g_basis_row1_PXPY;
+    string NNN_t2g_basis_row2_PXPY;
+    string NNN_t2g_basis_row0_PXMY;
+    string NNN_t2g_basis_row1_PXMY;
+    string NNN_t2g_basis_row2_PXMY;
+
+
+    NNN_t2g_basis_row0_PXPY=matchstring2(inputfile_, "NNN_Hopping_PXPY_t2g_basis_row0");
+    NNN_t2g_basis_row1_PXPY=matchstring2(inputfile_, "NNN_Hopping_PXPY_t2g_basis_row1");
+    NNN_t2g_basis_row2_PXPY=matchstring2(inputfile_, "NNN_Hopping_PXPY_t2g_basis_row2");
+    NNN_t2g_basis_row0_PXMY=matchstring2(inputfile_, "NNN_Hopping_PXMY_t2g_basis_row0");
+    NNN_t2g_basis_row1_PXMY=matchstring2(inputfile_, "NNN_Hopping_PXMY_t2g_basis_row1");
+    NNN_t2g_basis_row2_PXMY=matchstring2(inputfile_, "NNN_Hopping_PXMY_t2g_basis_row2");
+
+    stringstream t2g_row0_stream_PXPY(NNN_t2g_basis_row0_PXPY);
+    stringstream t2g_row1_stream_PXPY(NNN_t2g_basis_row1_PXPY);
+    stringstream t2g_row2_stream_PXPY(NNN_t2g_basis_row2_PXPY);
+    stringstream t2g_row0_stream_PXMY(NNN_t2g_basis_row0_PXMY);
+    stringstream t2g_row1_stream_PXMY(NNN_t2g_basis_row1_PXMY);
+    stringstream t2g_row2_stream_PXMY(NNN_t2g_basis_row2_PXMY);
+
+    t2g_hopping_NNN_PXPY.resize(3,3);
+    for(int n=0;n<3;n++){
+        t2g_row0_stream_PXPY >> t2g_hopping_NNN_PXPY(0,n);
+        t2g_row1_stream_PXPY >> t2g_hopping_NNN_PXPY(1,n);
+        t2g_row2_stream_PXPY >> t2g_hopping_NNN_PXPY(2,n);
+    }
+
+    t2g_hopping_NNN_PXMY.resize(3,3);
+    for(int n=0;n<3;n++){
+        t2g_row0_stream_PXMY >> t2g_hopping_NNN_PXMY(0,n);
+        t2g_row1_stream_PXMY >> t2g_hopping_NNN_PXMY(1,n);
+        t2g_row2_stream_PXMY >> t2g_hopping_NNN_PXMY(2,n);
+    }
+
+
+    //----------------------------------
 
     string Crystal_Field_t2g;
     Crystal_Field_t2g=matchstring2(inputfile_, "Crystal_Field_t2g");

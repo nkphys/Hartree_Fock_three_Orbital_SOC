@@ -1,26 +1,32 @@
 PBC_X=true
 PBC_Y=true
-Xsite=8
-Ysite=8
+Xsite=6
+Ysite=6
 TwistedBoundaryCond_mx=0
 TwistedBoundaryCond_my=0
-TBC_cellsX=4
-TBC_cellsY=4
-Total No. of particles=128
+TBC_cellsX=6
+TBC_cellsY=6
+Total No. of particles=72
 FixingMu=false
 MuValueFixed=7.10207697
-RandomSeed=2
+RandomSeed=4
+Temperature=0.0001
 
 Pnictides_Hopping=false
-Nearest_Neigh_Hopping_X_t2g_basis_row0=-0.129 0.0 0.0
-Nearest_Neigh_Hopping_X_t2g_basis_row1=0.0 0.0 0.0
-Nearest_Neigh_Hopping_X_t2g_basis_row2=0.0 0.0 -0.146
-Nearest_Neigh_Hopping_Y_t2g_basis_row0=0.0 0.0 0.0
-Nearest_Neigh_Hopping_Y_t2g_basis_row1=0.0 -0.124 0.0
-Nearest_Neigh_Hopping_Y_t2g_basis_row2=0.0 0.0 -0.140
+Nearest_Neigh_Hopping_X_t2g_basis_row0=-0.193 0.0 0.0
+Nearest_Neigh_Hopping_X_t2g_basis_row1=0.0 -0.039 0.0
+Nearest_Neigh_Hopping_X_t2g_basis_row2=0.0 0.0 -0.246
+Nearest_Neigh_Hopping_Y_t2g_basis_row0=-0.039 0.0 0.0
+Nearest_Neigh_Hopping_Y_t2g_basis_row1=0.0 -0.193 0.0
+Nearest_Neigh_Hopping_Y_t2g_basis_row2=0.0 0.0 -0.246
+NNN_Hopping_PXPY_t2g_basis_row0=0.011  0.002  0.000
+NNN_Hopping_PXPY_t2g_basis_row1=0.002  0.011  0.000
+NNN_Hopping_PXPY_t2g_basis_row2=0.000  0.000 -0.080
+NNN_Hopping_PXMY_t2g_basis_row0=0.011 -0.002  0.000
+NNN_Hopping_PXMY_t2g_basis_row1=-0.002 0.011  0.000
+NNN_Hopping_PXMY_t2g_basis_row2=0.000  0.000 -0.080
 
-
-Crystal_Field_t2g=0.180 0.172 -0.004
+Crystal_Field_t2g=4.748 4.748 4.639
 
 ReadDisorderConf=false
 DisorderSeedFile=Staggered_pi0_6x6.txt
@@ -30,16 +36,17 @@ Disorder_Strength=0.0
 Simple_Mixing=0
 Broyden_Mixing=1
 Broyden_Second_Method_Mixing=0
-alpha_OP=0.7
+alpha_OP=0.5
+
 
 w_minus1=0.1
 wn=0.6
 BroydenSecondMethodCounter=10
 
 
-J_HUND=2.0
-U_Onsite=8.0
-U_prime_Onsite=4.0
+J_HUND=0.8
+U_Onsite=4.0
+U_prime_Onsite=2.4
 Lambda_SOC=0.0
 
 
@@ -48,8 +55,11 @@ eta_dos=0.02
 w_min=-5.0
 w_max=15.0
 
-No_of_SelfConsistency_iters=2000
+No_of_SelfConsistency_iters=500
 Convergence_Error=0.001
 Read_initial_OPvalues=0
-Read_initial_OPvalues_file=OrderParams_OUTPUT.txt
+Read_initial_OPvalues_file=OrderParams_OUTPUT_Temp0.18.txt
+Just_Hartree=0
+Create_OPvalues=0
+Create_OPType=T4_AFM
 Write_Final_OPvalues_file=OrderParams_OUTPUT.txt
