@@ -207,7 +207,7 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
     }
 
     for(int orb=0;orb<3;orb++){
-      Orb_den_Avg[orb] = Orb_den_Avg[orb]*(1.0/(1.0*lx_*ly*));
+      Orb_den_Avg[orb] = Orb_den_Avg[orb]*(1.0/(1.0*lx_*ly_));
       cout<<"orb "<<orb<<" avg. den = "<<Orb_den_Avg[orb]<<endl;
     }
 
