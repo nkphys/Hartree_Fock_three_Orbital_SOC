@@ -171,6 +171,8 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
 
     Observables_.Calculate_Local_n_orb_resolved();
 
+    Mat_1_doub Orb_den_Avg;
+    Orb_den_Avg.resize(3);
     string File_Out_Local_orb_densities = "Local_orb_spin_resolved_densities.txt";
     ofstream file_out_Local_orb_densities(File_Out_Local_orb_densities.c_str());
     file_out_Local_orb_densities<<"#site     ix    iy    yz(orb=0),up   yz(orb=0),dn   xz(orb=1),up   xz(orb=1),dn   xy(orb=2),up   xy(orb=2),dn"<<endl;
@@ -191,6 +193,11 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
 
                     c1=Coordinates_.Nc_dof(site_i,orb+3*spin);
                     file_out_Local_orb_densities<<setw(15)<<Observables_.Local_n_orb_resolved[c1];
+
+                    if( (iy_temp < ly_ )&& (ix_temp<lx_)  ){
+                    Orb_den_Avg[orb] +=Observables_.Local_n_orb_resolved[c1];
+                    }
+
                 }
             }
             file_out_Local_orb_densities<<endl;
@@ -198,6 +205,13 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
         }
         file_out_Local_orb_densities<<endl;
     }
+
+    for(int orb=0;orb<3;orb++){
+      Orb_den_Avg[orb] = Orb_den_Avg[orb]*(1.0/(1.0*lx_*ly*));
+      cout<<"orb "<<orb<<" avg. den = "<<Orb_den_Avg[orb]<<endl;
+    }
+
+
 
 
 
