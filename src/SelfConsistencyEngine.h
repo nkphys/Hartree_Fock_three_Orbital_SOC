@@ -46,7 +46,7 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
     complex<double> zero(0.0,0.0);
 
     double muu_prev;
-    double Curr_QuantE;
+    double Curr_QuantE, Curr_KE;
     double Prev_QuantE;
     double Curr_ClassicalE;
     double Prev_ClassicalE;
@@ -73,7 +73,7 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
     file_out_progress<<"Iter"<<setw(15)<<
                        "Error_OP"<<setw(15)<<
                        "mu"<<setw(17)<<
-                       "E_CL"<<setw(17)<<"E_Quantum"<<endl;
+                       "E_CL"<<setw(17)<<"E_Quantum"<<setw(17)<<"E_KE"<<endl;
 
 
 
@@ -137,11 +137,12 @@ void SelfConsistencyEngine::RUN_SelfConsistencyEngine(){
             Error_OP=Observables_.Error_OP_;
 
 
-
+            //H_Quant= H_KE + H_Quant_int; H_Quant_int=-2*E_classical;
+            Curr_KE=Curr_QuantE + (2.0*Curr_ClassicalE);
             file_out_progress<<setprecision(15)<<count<<setw(30)<<
                                Error_OP<<setw(30)<<
                                Parameters_.mus<<setw(32)<<
-                               Curr_ClassicalE<<setw(32)<<Curr_QuantE<<endl;
+                               Curr_ClassicalE<<setw(32)<<Curr_QuantE<<setw(32)<<Curr_KE<<endl;
 
 
             if(Parameters_.BroydenSecondMethodMixing==true){

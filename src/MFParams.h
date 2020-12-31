@@ -835,8 +835,48 @@ void MFParams::initialize(){
             }
 
 
+            if(Parameters_.Create_OPs_type=="AFM_AFO_Hartree"){
 
-            if(Parameters_.Create_OPs_type=="T5_AFM"){
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                int Spin_temp1, Spin_temp2;
+                double spin_direction;
+                int ORB_TEMP;
+                double OP_temp;
+                OP_temp=1.0;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indx(i);
+                    iy=Coordinates_.indy(i);
+                    spin_direction = 1.0*(pow(-1.0, 1.0*(ix+iy)));
+                    if(spin_direction>0.0){
+                        ORB_TEMP=YZ_;
+                        Spin_temp1=UP_;
+                        Spin_temp2=DOWN_;
+                    }
+                    else{
+                        ORB_TEMP=XZ_;
+                        Spin_temp2=UP_;
+                        Spin_temp1=DOWN_;
+                    }
+
+                    OParams_[i][ORB_TEMP + 3*Spin_temp1][ORB_TEMP + 3*Spin_temp1]=complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*Spin_temp2][ORB_TEMP + 3*Spin_temp2]=complex<double>(0,0);
+
+                    OParams_[i][XY_ + 3*Spin_temp1][XY_ + 3*Spin_temp1]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*Spin_temp2][XY_ + 3*Spin_temp2]=complex<double>(0,0);
+
+
+                }
+
+            }
+            if(Parameters_.Create_OPs_type=="AFM_AFO"){
 
                 for(int i=0;i<ns_;i++){
                     for(int state1=0;state1<6;state1++){
@@ -869,6 +909,112 @@ void MFParams::initialize(){
 
                     OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
                     OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+
+
+                }
+
+            }
+            if(Parameters_.Create_OPs_type=="AFM_FO"){
+
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                double spin_direction;
+                int ORB_TEMP;
+                double OP_temp;
+                OP_temp=0.4;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indx(i);
+                    iy=Coordinates_.indy(i);
+                    spin_direction = 1.0*(pow(-1.0, 1.0*(ix+iy)));
+                    if(spin_direction>0.0){
+                        ORB_TEMP=YZ_;
+                    }
+                    else{
+                        ORB_TEMP=YZ_;
+                    }
+
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*UP_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*DOWN_][ORB_TEMP + 3*DOWN_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+
+
+                }
+
+            }
+            if(Parameters_.Create_OPs_type=="AFM_DO"){
+
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                double spin_direction;
+                int ORB_TEMP;
+                double OP_temp;
+                OP_temp=0.5;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indx(i);
+                    iy=Coordinates_.indy(i);
+                    spin_direction = 1.0*(pow(-1.0, 1.0*(ix+iy)));
+
+                    for(ORB_TEMP=YZ_;ORB_TEMP<=XZ_;ORB_TEMP++){
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*UP_]=0.5*complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*DOWN_][ORB_TEMP + 3*DOWN_]=0.5*complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*DOWN_]=0.5*complex<double>(0.0,spin_direction*OP_temp);
+                    }
+                    OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,spin_direction*OP_temp);
+
+
+
+                }
+
+            }
+            if(Parameters_.Create_OPs_type=="PM_DO"){
+
+                for(int i=0;i<ns_;i++){
+                    for(int state1=0;state1<6;state1++){
+                        for(int state2=0;state2<6;state2++){
+                            OParams_[i][state1][state2]=zero_complex;
+                        }
+                    }
+                }
+
+                int ix, iy;
+                double spin_direction;
+                int ORB_TEMP;
+                double OP_temp;
+                OP_temp=0.5;
+                for(int i=0;i<ns_;i++){
+                    ix=Coordinates_.indx(i);
+                    iy=Coordinates_.indy(i);
+                    spin_direction = 1.0*(pow(-1.0, 1.0*(ix+iy)));
+
+                    for(ORB_TEMP=YZ_;ORB_TEMP<=XZ_;ORB_TEMP++){
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*UP_]=0.5*complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*DOWN_][ORB_TEMP + 3*DOWN_]=0.5*complex<double>(OP_temp,0);
+                    OParams_[i][ORB_TEMP + 3*UP_][ORB_TEMP + 3*DOWN_]=0.5*complex<double>(0.0,0.0);
+                    }
+                    OParams_[i][XY_ + 3*DOWN_][XY_ + 3*DOWN_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*UP_]=complex<double>(OP_temp,0);
+                    OParams_[i][XY_ + 3*UP_][XY_ + 3*DOWN_]=complex<double>(0.0,0.0);
+
 
 
                 }

@@ -1892,9 +1892,9 @@ void Observables::Calculate_Nw_t2g(){
 
     //---------Read from input file-----------------------//
     double omega_min, omega_max, d_omega;
-    //omega_min=Hamiltonian_.eigs_[0]-0.5-Parameters_.mus;
-    //omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+0.5-Parameters_.mus;
-    omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
+    omega_min=Hamiltonian_.eigs_[0]-2.5;
+    omega_max=Hamiltonian_.eigs_[6*ns_ - 1]+2.5;
+    //omega_min=Parameters_.w_min;omega_max=Parameters_.w_max;
     double eta = Parameters_.eta_dos;
     d_omega=Parameters_.dw_dos;
     //---------------------------------------------------//
